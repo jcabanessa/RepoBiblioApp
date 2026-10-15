@@ -8,6 +8,5 @@ import java.util.List;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
-    // Opcional: Spring Data JPA te permite crear métodos personalizados solo escribiendo su nombre
-    List<Usuario> findByEmpresaEmpresaId(int empresaId);
+
 }

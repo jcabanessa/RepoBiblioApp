@@ -8,6 +8,4 @@ import java.util.List;
 
 @Repository
 public interface LibroRepository extends JpaRepository<Libro, Integer> {
-    // Buscar libros por título (búsqueda parcial)
-    List<Libro> findByTituloContainingIgnoreCase(String titulo);
 }

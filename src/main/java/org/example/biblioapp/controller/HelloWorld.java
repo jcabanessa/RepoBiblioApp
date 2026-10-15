@@ -1,4 +1,4 @@
-package org.example.biblioapp.controller;
+/*package org.example.biblioapp.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,4 +11,4 @@ public class HelloWorld {
     public String helloWorld() {
         return "¡Hola Mundo desde Spring Boot!";
     }
-}
+}*/

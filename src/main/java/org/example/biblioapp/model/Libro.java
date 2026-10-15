@@ -2,9 +2,6 @@ package org.example.biblioapp.model;
 
 import jakarta.persistence.*;
 import java.util.List;
-import org.example.biblioapp.model.Usuario;
-import org.example.biblioapp.model.Prestamo;
-import org.example.biblioapp.model.Empresa;
 
 @Entity
 @Table(name = "libros")
@@ -19,9 +16,6 @@ public class Libro {
     private String isbn;
     private int cantidad;
 
-    @ManyToOne
-    @JoinColumn(name = "empresa_id")
-    private Empresa empresa;
 
     @OneToMany(mappedBy = "libro", cascade = CascadeType.ALL)
     private List<Prestamo> prestamos;
@@ -39,6 +33,6 @@ public class Libro {
     public void setIsbn(String isbn) { this.isbn = isbn; }
     public int getCantidad() { return cantidad; }
     public void setCantidad(int cantidad) { this.cantidad = cantidad; }
-    public Empresa getEmpresa() { return empresa; }
-    public void setEmpresa(Empresa empresa) { this.empresa = empresa; }
+    public List<Prestamo> getPrestamos() { return prestamos; }
+    public void setPrestamos(List<Prestamo> prestamos) { this.prestamos = prestamos; }
 }
