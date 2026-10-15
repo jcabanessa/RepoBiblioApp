@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Libro</title>
+</head>
+<body>
+<h1 th:text="${libro.libroId} != 0 ? 'Editar Libro' : 'Nuevo Libro'">Formulario</h1>
+
+<!-- El formulario apunta a la ruta POST /libros -->
+<form th:action="@{/libros}" th:object="${libro}" method="post">
+
+    <!-- Campo oculto necesario para que reconozca si es una actualización (ID) -->
+    <input type="hidden" th:field="*{libroId}" />
+
+    <div>
+        <label>Título:</label>
+        <input type="text" th:field="*{titulo}" required />
+    </div>
+    <br>
+    <div>
+        <label>Autor:</label>
+        <input type="text" th:field="*{autor}" required />
+    </div>
+    <br>
+    <div>
+        <label>ISBN:</label>
+        <input type="text" th:field="*{isbn}" />
+    </div>
+    <br>
+    <div>
+        <label>Cantidad:</label>
+        <input type="number" th:field="*{cantidad}" min="0" />
+    </div>
+    <br>
+
+    <button type="submit">Guardar</button>
+</form>
+
+<br>
+<a th:href="@{/libros}">Cancelar</a>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Formulario de Préstamo</title>
+</head>
+<body>
+<h1>Gestión de Préstamo</h1>
+
+<form th:action="@{/prestamos}" th:object="${prestamo}" method="post">
+
+    <input type="hidden" th:field="*{prestamoId}" />
+
+    <!-- Selector de Usuario -->
+    <div>
+        <label>Usuario:</label>
+        <select th:field="*{usuario}">
+            <option value="">Seleccione un usuario</option>
+            <option th:each="u : ${usuarios}"
+                    th:value="${u.usuarioId}"
+                    th:text="${u.nombre}">
+            </option>
+        </select>
+    </div>
+    <br>
+
+    <!-- Selector de Libro -->
+    <div>
+        <label>Libro:</label>
+        <select th:field="*{libro}">
+            <option value="">Seleccione un libro</option>
+            <option th:each="l : ${libros}"
+                    th:value="${l.libroId}"
+                    th:text="${l.titulo}">
+            </option>
+        </select>
+    </div>
+    <br>
+
+    <div>
+        <label>Fecha de Préstamo:</label>
+        <input type="date" th:field="*{fechaPrestamo}" />
+    </div>
+    <br>
+
+    <div>
+        <label>Fecha de Devolución:</label>
+        <input type="date" th:field="*{fechaDevolucion}" />
+    </div>
+    <br>
+
+    <div>
+        <label>Estado:</label>
+        <input type="text" th:field="*{estado}" placeholder="Ej: Activo, Devuelto" />
+    </div>
+    <br>
+
+    <button type="submit">Guardar Préstamo</button>
+</form>
+
+<br>
+<a th:href="@{/prestamos}">Cancelar</a>
+</body>
+</html>
