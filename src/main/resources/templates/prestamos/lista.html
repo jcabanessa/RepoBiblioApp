@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Préstamos</title>
+</head>
+<body>
+<h1>Gestión de Préstamos</h1>
+
+<a th:href="@{/prestamos/new}">+ Registrar Nuevo Préstamo</a>
+<br><br>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Usuario</th>
+        <th>Libro</th>
+        <th>Fecha Préstamo</th>
+        <th>Fecha Devolución</th>
+        <th>Estado</th>
+        <th>Acciones</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="p : ${prestamos}">
+        <td th:text="${p.prestamoId}">1</td>
+        <!-- Navegación por objetos relacionales -->
+        <td th:text="${p.usuario != null ? p.usuario.nombre : 'Sin usuario'}">Nombre Usuario</td>
+        <td th:text="${p.libro != null ? p.libro.titulo : 'Sin libro'}">Título Libro</td>
+        <td th:text="${#dates.format(p.fechaPrestamo, 'dd/MM/yyyy')}">01/10/2026</td>
+        <td th:text="${#dates.format(p.fechaDevolucion, 'dd/MM/yyyy')}">15/10/2026</td>
+        <td th:text="${p.estado}">Activo</td>
+        <td>
+            <a th:href="@{/prestamos/edit/{id}(id=${p.prestamoId})}">Editar</a> |
+            <a th:href="@{/prestamos/delete/{id}(id=${p.prestamoId})}" onclick="return confirm('¿Eliminar préstamo?')">Eliminar</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<br>
+<a th:href="@{/}">Volver al inicio</a>
+</body>
+</html>
