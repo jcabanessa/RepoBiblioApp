@@ -7,14 +7,22 @@
 <body>
 <h1>Gestión de Préstamo</h1>
 
+
 <form th:action="@{/prestamos}" th:object="${prestamo}" method="post">
+    <!-- Muestra cualquier error de validación que haya ocurrido -->
+    <div th:if="${#fields.hasErrors('*')}" style="color: red; border: 1px solid red; padding: 10px; margin-bottom: 15px;">
+        <p><b>Por favor, corrige los siguientes errores:</b></p>
+        <ul>
+            <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Error</li>
+        </ul>
+    </div>
 
     <input type="hidden" th:field="*{prestamoId}" />
 
     <!-- Selector de Usuario -->
     <div>
         <label>Usuario:</label>
-        <select th:field="*{usuario}">
+        <select th:field="*{usuario.usuarioId}" required>
             <option value="">Seleccione un usuario</option>
             <option th:each="u : ${usuarios}"
                     th:value="${u.usuarioId}"
@@ -27,7 +35,7 @@
     <!-- Selector de Libro -->
     <div>
         <label>Libro:</label>
-        <select th:field="*{libro}">
+        <select th:field="*{libro.libroId}" required>
             <option value="">Seleccione un libro</option>
             <option th:each="l : ${libros}"
                     th:value="${l.libroId}"
@@ -38,14 +46,17 @@
     <br>
 
     <div>
-        <label>Fecha de Préstamo:</label>
-        <input type="date" th:field="*{fechaPrestamo}" />
+        <label>Fecha de Préstamo: Automática hoy</label>
     </div>
     <br>
 
     <div>
         <label>Fecha de Devolución:</label>
-        <input type="date" th:field="*{fechaDevolucion}" />
+        <input type="date" th:field="*{fechaDevolucion}" required />
+        <!-- Muestra el error de validación si existe -->
+        <p th:if="${#fields.hasErrors('fechaDevolucionValida')}"
+           th:errors="*{fechaDevolucionValida}"
+           style="color: red; font-size: 0.9em;"></p>
     </div>
     <br>
 

@@ -19,6 +19,11 @@ public class Usuario {
     @Temporal(TemporalType.DATE)
     private Date fechaRegistro;
 
+    @PrePersist
+    public void prePersist() {
+        this.fechaRegistro = new Date();
+    }
+
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Prestamo> prestamos;
 

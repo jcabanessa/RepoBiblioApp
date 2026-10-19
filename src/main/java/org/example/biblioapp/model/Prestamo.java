@@ -1,6 +1,8 @@
 package org.example.biblioapp.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.AssertTrue;
+
 import java.util.Date;
 
 
@@ -17,6 +19,15 @@ public class Prestamo {
 
     @Temporal(TemporalType.DATE)
     private Date fechaDevolucion;
+
+    // VALIDACIÓN: Comprueba que la fecha de devolución sea posterior a la de préstamo
+    @AssertTrue(message = "La fecha de devolución debe ser posterior a la fecha de préstamo")
+    public boolean isFechaDevolucionValida() {
+        if (fechaPrestamo == null || fechaDevolucion == null) {
+            return true; // Si alguna está vacía, dejamos que otras validaciones actúen
+        }
+        return fechaDevolucion.after(fechaPrestamo);
+    }
 
     private String estado;
 

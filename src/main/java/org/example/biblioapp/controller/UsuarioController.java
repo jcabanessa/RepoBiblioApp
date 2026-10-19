@@ -7,6 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
+
 @Controller
 @RequestMapping("/usuarios")
 public class UsuarioController {
@@ -22,7 +24,9 @@ public class UsuarioController {
 
     @GetMapping("/new")
     public String mostrarFormularioCreacion(Model model) {
-        model.addAttribute("usuario", new Usuario());
+        Usuario usuario = new Usuario();
+        usuario.setFechaRegistro(new Date());
+        model.addAttribute("usuario", usuario);
         return "usuarios/form";
     }
 
