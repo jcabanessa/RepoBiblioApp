@@ -1,46 +1,54 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-  <meta charset="UTF-8">
-  <title>Lista de Libros</title>
-</head>
-<body>
-<h1>Gestión de Libros</h1>
 
-<!-- Botón para ir al formulario de creación -->
-<a th:href="@{/libros/new}">+ Nuevo Libro</a>
-<br><br>
+<!-- 1. Cargamos el fragmento del head (Bootstrap y título) -->
+<head th:replace="~{fragmentos :: cabecera('Lista de Libros')}"></head>
 
-<table border="1">
-  <thead>
-  <tr>
-    <th>ID</th>
-    <th>Título</th>
-    <th>Autor</th>
-    <th>ISBN</th>
-    <th>Cantidad</th>
-    <th>Acciones</th>
-  </tr>
-  </thead>
-  <tbody>
-  <!-- Bucle para recorrer la lista de libros enviada desde el controlador -->
-  <tr th:each="libro : ${libros}">
-    <td th:text="${libro.libroId}">1</td>
-    <td th:text="${libro.titulo}">Título de ejemplo</td>
-    <td th:text="${libro.autor}">Autor de ejemplo</td>
-    <td th:text="${libro.isbn}">ISBN</td>
-    <td th:text="${libro.cantidad}">0</td>
-    <td>
-      <!-- Enlace para editar -->
-      <a th:href="@{/libros/edit/{id}(id=${libro.libroId})}">Editar</a> |
-      <!-- Enlace para eliminar -->
-      <a th:href="@{/libros/delete/{id}(id=${libro.libroId})}" onclick="return confirm('¿Estás seguro?')">Eliminar</a>
-    </td>
-  </tr>
-  </tbody>
-</table>
+<!-- Añadimos un fondo ligeramente gris (bg-light) para que la tabla blanca destaque más -->
+<body class="bg-light">
 
-<br>
-<a th:href="@{/}">Volver al inicio</a>
+<!-- 2. Inyectamos la barra de navegación superior -->
+<div th:replace="~{fragmentos :: menu-superior}"></div>
+
+<!-- 3. Contenedor principal de la página -->
+<div class="container mt-4">
+
+  <h1 class="mb-4">Gestión de Libros</h1>
+
+  <!-- Botón para crear un nuevo libro -->
+  <a th:href="@{/libros/new}" class="btn btn-primary mb-3 shadow-sm">+ Nuevo Libro</a>
+
+  <!-- Tabla con diseño Bootstrap y fondo blanco -->
+  <div class="table-responsive shadow-sm">
+    <table class="table table-bordered table-striped table-hover mb-0 bg-white">
+      <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Título</th>
+        <th>Autor</th>
+        <th>ISBN</th>
+        <th>Cantidad</th>
+        <th>Acciones</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="libro : ${libros}">
+        <td th:text="${libro.libroId}">1</td>
+        <td th:text="${libro.titulo}">Título de ejemplo</td>
+        <td th:text="${libro.autor}">Autor de ejemplo</td>
+        <td th:text="${libro.isbn}">ISBN</td>
+        <td th:text="${libro.cantidad}">0</td>
+        <td>
+          <!-- Botones de acción -->
+          <a th:href="@{/libros/edit/{id}(id=${libro.libroId})}" class="btn btn-warning btn-sm">Editar</a>
+          <a th:href="@{/libros/delete/{id}(id=${libro.libroId})}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este libro?')">Eliminar</a>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
 </body>
 </html>

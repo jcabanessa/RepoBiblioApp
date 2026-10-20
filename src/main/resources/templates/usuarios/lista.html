@@ -1,42 +1,52 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Lista de Usuarios</title>
-</head>
-<body>
-<h1>Gestión de Usuarios</h1>
 
-<a th:href="@{/usuarios/new}">+ Nuevo Usuario</a>
-<br><br>
+<!-- Cargamos el fragmento de la cabecera con el título de la página -->
+<head th:replace="~{fragmentos :: cabecera('Lista de Usuarios')}"></head>
 
-<table border="1">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Nombre</th>
-        <th>Email</th>
-        <th>Teléfono</th>
-        <th>Fecha de Registro</th>
-        <th>Acciones</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="usuario : ${usuarios}">
-        <td th:text="${usuario.usuarioId}">1</td>
-        <td th:text="${usuario.nombre}">Nombre de ejemplo</td>
-        <td th:text="${usuario.email}">ejemplo@email.com</td>
-        <td th:text="${usuario.telefono}">600000000</td>
-        <td th:text="${#dates.format(usuario.fechaRegistro, 'dd/MM/yyyy')}">01/01/2026</td>
-        <td>
-            <a th:href="@{/usuarios/edit/{id}(id=${usuario.usuarioId})}">Editar</a> |
-            <a th:href="@{/usuarios/delete/{id}(id=${usuario.usuarioId})}" onclick="return confirm('¿Eliminar usuario?')">Eliminar</a>
-        </td>
-    </tr>
-    </tbody>
-</table>
+<body class="bg-light">
 
-<br>
-<a th:href="@{/}">Volver al inicio</a>
+<!-- Inyectamos el menú de navegación superior -->
+<div th:replace="~{fragmentos :: menu-superior}"></div>
+
+<div class="container mt-4">
+
+    <h1 class="mb-4">Gestión de Usuarios</h1>
+
+    <!-- Botón para añadir un nuevo usuario -->
+    <a th:href="@{/usuarios/new}" class="btn btn-primary mb-3 shadow-sm">+ Nuevo Usuario</a>
+
+    <!-- Tabla de usuarios con diseño Bootstrap -->
+    <div class="table-responsive shadow-sm">
+        <table class="table table-bordered table-striped table-hover mb-0 bg-white">
+            <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Correo Electrónico</th>
+                <th>Teléfono</th>
+                <th>Acciones</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="usuario : ${usuarios}">
+                <td th:text="${usuario.usuarioId}">1</td>
+                <td th:text="${usuario.nombre}">Alejandro</td>
+                <td th:text="${usuario.apellidos}">Palomanes Gallego</td>
+                <td th:text="${usuario.email}">ejemplo@correo.com</td>
+                <td th:text="${usuario.telefono}">600123456</td>
+                <td>
+                    <!-- Enlaces de acción que apuntan al controlador de usuarios -->
+                    <a th:href="@{/usuarios/edit/{id}(id=${usuario.usuarioId})}" class="btn btn-warning btn-sm">Editar</a>
+                    <a th:href="@{/usuarios/delete/{id}(id=${usuario.usuarioId})}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este usuario? Si tiene préstamos activos podría generar un error.')">Eliminar</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
 </body>
 </html>

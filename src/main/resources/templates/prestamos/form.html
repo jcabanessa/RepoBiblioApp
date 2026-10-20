@@ -1,68 +1,78 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Formulario de Préstamo</title>
-</head>
-<body>
-<h1>Gestión de Préstamo</h1>
 
+<!-- Cargamos la cabecera dinámica -->
+<head th:replace="~{fragmentos :: cabecera(${prestamo.prestamoId} != null and ${prestamo.prestamoId} != 0 ? 'Editar Préstamo' : 'Nuevo Préstamo')}"></head>
 
-<form th:action="@{/prestamos}" th:object="${prestamo}" method="post">
+<body class="bg-light">
 
-    <input type="hidden" th:field="*{prestamoId}" />
+<!-- Inyectamos el menú de navegación -->
+<div th:replace="~{fragmentos :: menu-superior}"></div>
 
-    <!-- Selector de Usuario -->
-    <div>
-        <label>Usuario:</label>
-        <select th:field="*{usuario.usuarioId}" required>
-            <option value="">Seleccione un usuario</option>
-            <option th:each="u : ${usuarios}"
-                    th:value="${u.usuarioId}"
-                    th:text="${u.nombre}">
-            </option>
-        </select>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+
+            <h1 class="mb-4 text-center" th:text="${prestamo.prestamoId} != null and ${prestamo.prestamoId} != 0 ? 'Editar Préstamo' : 'Nuevo Préstamo'">Formulario de Préstamo</h1>
+
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-4">
+
+                    <form th:action="@{/prestamos}" th:object="${prestamo}" method="post">
+
+                        <input type="hidden" th:field="*{prestamoId}" />
+
+                        <!-- Selector desplegable para el Libro -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Libro prestado:</label>
+                            <select class="form-select" th:field="*{libro.libroId}" required>
+                                <option value="" disabled selected>-- Selecciona un libro del catálogo --</option>
+                                <option th:each="lib : ${libros}"
+                                        th:value="${lib.libroId}"
+                                        th:text="${lib.titulo + ' (' + lib.autor + ')'}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- Selector desplegable para el Usuario -->
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Usuario que lo retira:</label>
+                            <select class="form-select" th:field="*{usuario.usuarioId}" required>
+                                <option value="" disabled selected>-- Selecciona un usuario registrado --</option>
+                                <option th:each="user : ${usuarios}"
+                                        th:value="${user.usuarioId}"
+                                        th:text="${user.nombre + ' ' + user.apellidos}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- Las fechas puestas en dos columnas para ahorrar espacio vertical -->
+                        <div class="row">
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label fw-bold">Fecha de Préstamo:</label>
+                                <!-- type="date" invoca el calendario nativo del navegador -->
+                                <input type="date" class="form-control" th:field="*{fechaPrestamo}" required />
+                            </div>
+
+                            <div class="col-md-6 mb-4">
+                                <label class="form-label fw-bold">Fecha de Devolución:</label>
+                                <input type="date" class="form-control" th:field="*{fechaDevolucion}" />
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between">
+                            <a th:href="@{/prestamos}" class="btn btn-outline-secondary">Cancelar</a>
+                            <button type="submit" class="btn btn-success">Guardar Préstamo</button>
+                        </div>
+
+                    </form>
+
+                </div>
+            </div>
+
+        </div>
     </div>
-    <br>
+</div>
 
-    <!-- Selector de Libro -->
-    <div>
-        <label>Libro:</label>
-        <select th:field="*{libro.libroId}" required>
-            <option value="">Seleccione un libro</option>
-            <option th:each="l : ${libros}"
-                    th:value="${l.libroId}"
-                    th:text="${l.titulo}">
-            </option>
-        </select>
-    </div>
-    <br>
-
-    <div>
-        <label>Fecha de Préstamo: Automática hoy</label>
-    </div>
-    <br>
-
-    <div>
-        <label>Fecha de Devolución:</label>
-        <input type="date" th:field="*{fechaDevolucion}" required />
-        <!-- Muestra el error de validación si existe -->
-        <p th:if="${#fields.hasErrors('fechaDevolucionValida')}"
-           th:errors="*{fechaDevolucionValida}"
-           style="color: red; font-size: 0.9em;"></p>
-    </div>
-    <br>
-
-    <div>
-        <label>Estado:</label>
-        <input type="text" th:field="*{estado}" placeholder="Ej: Activo, Devuelto" />
-    </div>
-    <br>
-
-    <button type="submit">Guardar Préstamo</button>
-</form>
-
-<br>
-<a th:href="@{/prestamos}">Cancelar</a>
 </body>
 </html>

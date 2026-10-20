@@ -1,21 +1,61 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>BiblioApp - Menú Principal</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 40px; }
-        ul { line-height: 2.0; }
-    </style>
-</head>
-<body>
-<h1>Bienvenido a BiblioApp</h1>
-<p>Selecciona el módulo que deseas gestionar:</p>
 
-<ul>
-    <li><a th:href="@{/libros}">Gestionar Libros</a></li>
-    <li><a th:href="@{/usuarios}">Gestionar Usuarios</a></li>
-    <li><a th:href="@{/prestamos}">Gestionar Préstamos</a></li>
-</ul>
+<!-- 1. Cargamos el fragmento de la cabecera -->
+<head th:replace="~{fragmentos :: cabecera('Spring Library - Inicio')}"></head>
+
+<body class="bg-light">
+
+<!-- 2. Inyectamos la barra de navegación superior -->
+<div th:replace="~{fragmentos :: menu-superior}"></div>
+
+<div class="container mt-5">
+
+    <!-- Sección de bienvenida centrada -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold">Bienvenido a Library Spring App</h1>
+        <p class="lead text-muted">Panel de control principal. Selecciona el módulo que deseas gestionar.</p>
+    </div>
+
+    <!-- 3. Grid de tarjetas para las opciones del menú -->
+    <div class="row justify-content-center text-center">
+
+        <!-- Módulo de Libros -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body p-4 d-flex flex-column">
+                    <h2 class="h3 mb-3">📚 Libros</h2>
+                    <p class="text-muted flex-grow-1">Añade, edita, elimina y consulta el catálogo completo de la biblioteca.</p>
+                    <a th:href="@{/libros}" class="btn btn-primary w-100 mt-auto">Gestionar Libros</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Módulo de Usuarios -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body p-4 d-flex flex-column">
+                    <h2 class="h3 mb-3">👤 Usuarios</h2>
+                    <p class="text-muted flex-grow-1">Administra el registro de lectores y actualiza sus datos de contacto.</p>
+                    <a th:href="@{/usuarios}" class="btn btn-primary w-100 mt-auto">Gestionar Usuarios</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Módulo de Préstamos -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body p-4 d-flex flex-column">
+                    <h2 class="h3 mb-3">🔄 Préstamos</h2>
+                    <p class="text-muted flex-grow-1">Controla las entregas, devoluciones y los plazos de vencimiento.</p>
+                    <a th:href="@{/prestamos}" class="btn btn-primary w-100 mt-auto">Gestionar Préstamos</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
 </body>
 </html>

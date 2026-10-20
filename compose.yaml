@@ -1,10 +1,9 @@
 services:
   mysql:
     image: 'mysql:latest'
+    platform: linux/amd64
     environment:
-      - 'MYSQL_DATABASE=mydatabase'
-      - 'MYSQL_PASSWORD=secret'
-      - 'MYSQL_ROOT_PASSWORD=verysecret'
-      - 'MYSQL_USER=myuser'
+      - MYSQL_DATABASE=biblio_db
+      - MYSQL_ROOT_PASSWORD=root
     ports:
-      - '3306'
+      - '3307:3306'
