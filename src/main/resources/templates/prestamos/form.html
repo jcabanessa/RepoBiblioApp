@@ -9,13 +9,6 @@
 
 
 <form th:action="@{/prestamos}" th:object="${prestamo}" method="post">
-    <!-- Muestra cualquier error de validación que haya ocurrido -->
-    <div th:if="${#fields.hasErrors('*')}" style="color: red; border: 1px solid red; padding: 10px; margin-bottom: 15px;">
-        <p><b>Por favor, corrige los siguientes errores:</b></p>
-        <ul>
-            <li th:each="err : ${#fields.errors('*')}" th:text="${err}">Error</li>
-        </ul>
-    </div>
 
     <input type="hidden" th:field="*{prestamoId}" />
 

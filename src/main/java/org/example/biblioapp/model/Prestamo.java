@@ -2,6 +2,7 @@ package org.example.biblioapp.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.AssertTrue;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -12,13 +13,22 @@ public class Prestamo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int prestamoId;
+    private Integer prestamoId;
 
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date fechaPrestamo;
 
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date fechaDevolucion;
+
+    @PrePersist
+    public void prePersist() {
+        if (this.fechaPrestamo == null) {
+            this.fechaPrestamo = new Date();
+        }
+    }
 
     // VALIDACIÓN: Comprueba que la fecha de devolución sea posterior a la de préstamo
     @AssertTrue(message = "La fecha de devolución debe ser posterior a la fecha de préstamo")
@@ -42,8 +52,8 @@ public class Prestamo {
     public Prestamo() {}
 
     // Getters y Setters
-    public int getPrestamoId() { return prestamoId; }
-    public void setPrestamoId(int prestamoId) { this.prestamoId = prestamoId; }
+    public Integer getPrestamoId() { return prestamoId; }
+    public void setPrestamoId(Integer prestamoId) { this.prestamoId = prestamoId; }
     public Date getFechaPrestamo() { return fechaPrestamo; }
     public void setFechaPrestamo(Date fechaPrestamo) { this.fechaPrestamo = fechaPrestamo; }
     public Date getFechaDevolucion() { return fechaDevolucion; }

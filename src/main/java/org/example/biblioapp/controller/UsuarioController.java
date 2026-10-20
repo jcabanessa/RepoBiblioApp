@@ -32,12 +32,19 @@ public class UsuarioController {
 
     @PostMapping
     public String guardarUsuario(@ModelAttribute("usuario") Usuario usuario) {
+        if (usuario.getUsuarioId() != null && usuario.getUsuarioId() > 0) {
+            // Recuperamos el usuario original para mantener su fecha de registro intacta
+            Usuario usuarioExistente = usuarioRepository.findById(usuario.getUsuarioId()).orElse(null);
+            if (usuarioExistente != null) {
+                usuario.setFechaRegistro(usuarioExistente.getFechaRegistro());
+            }
+        }
         usuarioRepository.save(usuario);
         return "redirect:/usuarios";
     }
 
     @GetMapping("/edit/{id}")
-    public String mostrarFormularioEdicion(@PathVariable int id, Model model) {
+    public String mostrarFormularioEdicion(@PathVariable Integer id, Model model) {
         Usuario usuario = usuarioRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("ID de usuario invalido" + id));
         model.addAttribute("usuario", usuario);
@@ -45,7 +52,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/delete/{id}")
-    public String eliminarUsuario(@PathVariable int id) {
+    public String eliminarUsuario(@PathVariable Integer id) {
         usuarioRepository.deleteById(id);
         return "redirect:/usuarios";
     }

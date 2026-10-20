@@ -33,7 +33,7 @@ public class LibroController {
     }
 
     @GetMapping("/edit/{id}")
-    public String mostrarFormularioEdicion(@PathVariable int id, Model model) {
+    public String mostrarFormularioEdicion(@PathVariable Integer id, Model model) {
         Libro libro = libroRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("ID de libro inválido: " + id));
         model.addAttribute("libro", libro);
@@ -41,7 +41,7 @@ public class LibroController {
     }
 
     @GetMapping("/delete/{id}")
-    public String eliminarLibro(@PathVariable int id) {
+    public String eliminarLibro(@PathVariable Integer id) {
         libroRepository.deleteById(id);
         return "redirect:/libros";
     }

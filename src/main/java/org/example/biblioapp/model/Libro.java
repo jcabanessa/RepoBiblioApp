@@ -9,7 +9,7 @@ public class Libro {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int libroId;
+    private Integer libroId;
 
     private String titulo;
     private String autor;
@@ -23,8 +23,8 @@ public class Libro {
     public Libro() {}
 
     // Getters y Setters
-    public int getLibroId() { return libroId; }
-    public void setLibroId(int libroId) { this.libroId = libroId; }
+    public Integer getLibroId() { return libroId; }
+    public void setLibroId(Integer libroId) { this.libroId = libroId; }
     public String getTitulo() { return titulo; }
     public void setTitulo(String titulo) { this.titulo = titulo; }
     public String getAutor() { return autor; }

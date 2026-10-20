@@ -1,6 +1,8 @@
 package org.example.biblioapp.controller;
 
+import org.example.biblioapp.model.Libro;
 import org.example.biblioapp.model.Prestamo;
+import org.example.biblioapp.model.Usuario;
 import org.example.biblioapp.repository.LibroRepository;
 import org.example.biblioapp.repository.PrestamoRepository;
 import org.example.biblioapp.repository.UsuarioRepository;
@@ -54,14 +56,32 @@ public class PrestamoController {
             model.addAttribute("libros", libroRepository.findAll());
             return "prestamos/form";
         }
+        if (prestamo.getPrestamoId() != null && prestamo.getPrestamoId() > 0) {
+            // Si estamos editando, mantenemos la fecha de préstamo original
+            Prestamo prestamoExistente = prestamoRepository.findById(prestamo.getPrestamoId()).orElse(null);
+            if (prestamoExistente != null) {
+                prestamo.setFechaPrestamo(prestamoExistente.getFechaPrestamo());
+            }
+        } else {
+            // Si es nuevo, asignamos la fecha actual
+            prestamo.setFechaPrestamo(new Date());
+        }
         prestamoRepository.save(prestamo);
         return "redirect:/prestamos";
     }
 
     @GetMapping("/edit/{id}")
-    public String mostrarFormularioEdicion(@PathVariable int id, Model model) {
+    public String mostrarFormularioEdicion(@PathVariable Integer id,Model model) {
         Prestamo prestamo = prestamoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("ID de préstamo inválido: " + id));
+
+        // Nos aseguramos de que no sean nulos para evitar fallos de renderizado en el select
+        if (prestamo.getUsuario() == null) {
+            prestamo.setUsuario(new Usuario());
+        }
+        if (prestamo.getLibro() == null) {
+            prestamo.setLibro(new Libro());
+        }
         model.addAttribute("prestamo", prestamo);
         model.addAttribute("usuarios", usuarioRepository.findAll());
         model.addAttribute("libros", libroRepository.findAll());
@@ -69,7 +89,7 @@ public class PrestamoController {
     }
 
     @GetMapping("/delete/{id}")
-    public String eliminarPrestamo(@PathVariable int id) {
+    public String eliminarPrestamo(@PathVariable Integer id) {
         prestamoRepository.deleteById(id);
         return "redirect:/prestamos";
     }
