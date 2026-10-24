@@ -8,14 +8,79 @@
         <title th:text="${titulo}">Spring Library</title>
         <!-- Enlace a bootstrap -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body.fondo-biblioteca {
+            position: relative;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+
+        /* Capa con la imagen desenfocada */
+        body.fondo-biblioteca::before {
+            content: "";
+            position: fixed;
+            top: -10px;
+            left: -10px;
+            width: calc(100% + 20px);
+            height: calc(100% + 20px);
+            background-image: url('/img/006-library-biblioteca-angelica-a-roma_0002.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: blur(1px) brightness(0.75);
+            z-index: -1;
+        }
+
+        /* 2. Fondo para libros, usuarios y préstamos (desenfoque más marcado) */
+        body.fondo-biblioteca-gestion {
+            position: relative;
+            min-height: 100vh;
+            margin: 0;
+            overflow-x: hidden;
+        }
+        body.fondo-biblioteca-gestion::before {
+            content: "";
+            position: fixed;
+            top: -20px;
+            left: -20px;
+            width: calc(100% + 40px);
+            height: calc(100% + 40px);
+            background-image: url('/img/006-library-biblioteca-angelica-a-roma_0002.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            /* Blur más pronunciado para que no distraiga de tablas y formularios */
+            filter: blur(4.5px) brightness(0.65);
+            z-index: -1;
+        }
+
+
+
+        /* Capa frontal para que los textos y tarjetas queden nítidos */
+        .contenido-principal {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Sombra de texto suave para mejorar la lectura sobre fondos oscuros */
+        .text-shadow {
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+        }
+    </style>
 </head>
 <body>
+
 <!-- barra de navegación superior -->
 <nav th:fragment="menu-superior" class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4">
     <div class="container">
         <!-- Título / Logo que lleva al inicio -->
-        <a class="navbar-brand fw-bold" th:href="@{/}">📚 Spring Library App</a>
-
+        <!--<a class="navbar-brand fw-bold" th:href="@{/}">📖 Spring Library App</a> -->
+        <a class="navbar-brand" href="/"
+           style="color: #ced4da; font-family: 'Georgia', 'Garamond', 'Times New Roman', serif; font-size: 1.35rem; letter-spacing: 0.5px;">
+            📖 Spring Library App
+        </a>
         <div class="collapse navbar-collapse">
             <!-- ms-auto empuja los enlaces hacia la derecha -->
             <ul class="navbar-nav ms-auto">
