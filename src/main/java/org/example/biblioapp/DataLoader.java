@@ -53,7 +53,7 @@ public class DataLoader {
 
                 usuarioRepository.save(u1);
                 System.out.println(">>> Datos iniciales de usuarios cargados correctamente.");
-            }*/
+            }*/ // Se deben crear los usuarios manualmente ya que sino estamos compartiendo contraseñas
         };
     }
 }

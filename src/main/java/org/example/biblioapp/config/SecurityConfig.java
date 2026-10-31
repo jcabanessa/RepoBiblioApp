@@ -26,11 +26,16 @@ public class SecurityConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/login") // Nuestra página personalizada de login
+                        .loginProcessingUrl("/login")
                         .defaultSuccessUrl("/", true) // A dónde va tras iniciar sesión con éxito
                         .permitAll()
                 )
                 .logout(logout -> logout
+                        .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
+                        .invalidateHttpSession(true) // Borra la sesión en el servidor
+                        .clearAuthentication(true)   // Limpia la seguridad
+                        .deleteCookies("JSESSIONID") // Elimina la cookie del navegador
                         .permitAll()
                 );
 

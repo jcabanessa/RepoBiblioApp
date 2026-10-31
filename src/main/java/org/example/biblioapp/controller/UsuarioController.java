@@ -74,17 +74,4 @@ public class UsuarioController {
         usuarioRepository.deleteById(id);
         return "redirect:/usuarios";
     }
-
-    /*@PostMapping("/registro")
-    public String registrarUsuario(@ModelAttribute("usuario") Usuario usuario) {
-        // Encriptamos la contraseña antes de guardarla
-        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
-        usuarioRepository.save(usuario);
-        return "redirect:/login";
-    }
-
-    @GetMapping("/login")
-    public String mostrarLogin() {
-        return "login";
-    }*/
 }

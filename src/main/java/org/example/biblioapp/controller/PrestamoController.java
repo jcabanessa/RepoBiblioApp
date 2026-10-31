@@ -40,6 +40,7 @@ public class PrestamoController {
     public String mostrarFormularioCreacion(Model model) {
         Prestamo prestamo = new Prestamo();
         prestamo.setFechaPrestamo(new Date());
+        prestamo.setEstado("Activo");
         model.addAttribute("prestamo", prestamo);
         model.addAttribute("usuarios", usuarioRepository.findAll());
         model.addAttribute("libros", libroRepository.findAll());

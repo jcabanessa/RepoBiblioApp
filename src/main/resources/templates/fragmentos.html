@@ -91,17 +91,14 @@
                     <a class="btn btn-light btn-sm px-3 text-dark fw-semibold" th:href="@{/usuarios/new}">Registrarse</a>
                 </li>
 
-                <!-- Si SÍ está autenticado: Mostrar Nombre de Usuario y Botón de Logout -->
-                <li class="nav-item dropdown ms-lg-3" sec:authorize="isAuthenticated()">
-                    <a class="nav-link dropdown-toggle text-light fw-semibold" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        👤 <span sec:authentication="name">Usuario</span>
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end shadow">
-                        <li>
-                            <form th:action="@{/logout}" method="post" class="px-3 py-1 m-0">
-                                <button type="submit" class="btn btn-sm btn-outline-danger w-100">Cerrar Sesión</button>
-                            </form>
-                        </li>
+                <!-- Si SÍ está autenticado: Mostrar Nombre y Botón de Cerrar Sesión directamente -->
+                <li class="nav-item ms-lg-3 d-flex align-items-center gap-3" sec:authorize="isAuthenticated()">
+                    <span class="text-light">👤 <span sec:authentication="name">Usuario</span></span>
+
+                    <form th:action="@{/logout}" method="post" class="m-0">
+                        <button type="submit" class="btn btn-sm btn-outline-danger">Cerrar Sesión</button>
+                    </form>
+                </li>
                     </ul>
                 </li>
             </ul>

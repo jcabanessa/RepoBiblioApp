@@ -49,7 +49,9 @@ public class Prestamo {
     @JoinColumn(name = "libro_id")
     private Libro libro;
 
-    public Prestamo() {}
+    public Prestamo() {
+        this.estado = "Activo";
+    }
 
     // Getters y Setters
     public Integer getPrestamoId() { return prestamoId; }
