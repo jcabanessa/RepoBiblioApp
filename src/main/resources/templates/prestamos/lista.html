@@ -27,6 +27,7 @@
                 <th>Usuario</th>
                 <th>Fecha Préstamo</th>
                 <th>Fecha Devolución</th>
+                <th>Estado</th>
                 <th>Acciones</th>
             </tr>
             </thead>
@@ -41,6 +42,12 @@
 
                 <td th:text="${prestamo.fechaPrestamo}">2026-10-20</td>
                 <td th:text="${prestamo.fechaDevolucion}">2026-10-30</td>
+                <td>
+                    <span th:text="${prestamo.estado}"
+                          th:class="${prestamo.estado == 'Activo'} ? 'badge bg-success' : 'badge bg-secondary'">
+                        Activo
+                    </span>
+                </td>
 
                 <td>
                     <!-- Botones de acción apuntando a las rutas de préstamos -->

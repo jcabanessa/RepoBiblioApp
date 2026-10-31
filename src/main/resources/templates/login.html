@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabecera('Iniciar Sesión - Spring Library')}"></head>
+<body class="fondo-biblioteca d-flex align-items-center justify-content-center">
+
+<div class="container contenido-principal">
+    <div class="row justify-content-center">
+        <div class="col-md-5 col-lg-4">
+
+            <!-- Tarjeta de Login -->
+            <div class="card shadow-lg border-0 bg-dark text-light bg-opacity-75 p-4 rounded-4 backdrop-blur">
+                <div class="card-body">
+                    <h3 class="text-center mb-4 fw-bold text-shadow" style="font-family: 'Georgia', serif;">Iniciar Sesión</h3>
+
+                    <!-- Aviso informativo para accesos restringidos -->
+                    <div class="alert alert-warning py-2 small text-center mb-3" role="alert">
+                        🔒 Debes iniciar sesión para gestionar libros, usuarios y préstamos.
+                    </div>
+
+                    <!-- Alerta de error -->
+                    <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show py-2" role="alert">
+                        Correo o contraseña incorrectos.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <!-- Alerta de logout exitoso -->
+                    <div th:if="${param.logout}" class="alert alert-success alert-dismissible fade show py-2" role="alert">
+                        Has cerrado sesión correctamente.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+
+                    <!-- Formulario de login -->
+                    <form th:action="@{/login}" method="post">
+                        <div class="mb-3">
+                            <label for="username" class="form-label">Correo electrónico</label>
+                            <input type="email" id="username" name="username" class="form-control" placeholder="tu@correo.com" required autofocus />
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="password" class="form-label">Contraseña</label>
+                            <input type="password" id="password" name="password" class="form-control" placeholder="••••••••" required />
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-light fw-bold text-dark py-2 shadow-sm">Entrar</button>
+                        </div>
+                    </form>
+
+                    <hr class="border-secondary my-4">
+
+                    <div class="text-center">
+                        <p class="mb-0 text-light">¿No tienes una cuenta?</p>
+                        <a th:href="@{/usuarios/new}" class="text-info text-decoration-none fw-semibold">Regístrate aquí</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

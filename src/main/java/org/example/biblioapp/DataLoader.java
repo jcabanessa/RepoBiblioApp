@@ -7,6 +7,7 @@ import org.example.biblioapp.repository.UsuarioRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Date;
 import java.util.List;
@@ -15,7 +16,7 @@ import java.util.List;
 public class DataLoader {
 
     @Bean
-    CommandLineRunner initDatabase(LibroRepository libroRepository, UsuarioRepository usuarioRepository) {
+    CommandLineRunner initDatabase(LibroRepository libroRepository, UsuarioRepository usuarioRepository, PasswordEncoder passwordEncoder) {
         return args -> {
             // Solo inserta si la base de datos está completamente vacía
             if (libroRepository.count() == 0) {
@@ -41,16 +42,18 @@ public class DataLoader {
                 System.out.println(">>> Datos iniciales de libros cargados correctamente.");
             }
 
-            if (usuarioRepository.count() == 0) {
+            /*if (usuarioRepository.count() == 0) {
                 Usuario u1 = new Usuario();
-                u1.setNombre("Ana García");
+                u1.setNombre("Ana");
+                u1.setApellidos("García");
                 u1.setEmail("ana.garcia@email.com");
                 u1.setTelefono("600123456");
+                u1.setPassword("ana123");
                 u1.setFechaRegistro(new Date());
 
                 usuarioRepository.save(u1);
                 System.out.println(">>> Datos iniciales de usuarios cargados correctamente.");
-            }
+            }*/ // Se deben crear los usuarios manualmente ya que sino estamos compartiendo contraseñas
         };
     }
 }
