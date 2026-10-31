@@ -2,6 +2,7 @@ package org.example.biblioapp.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,7 +18,9 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         // Rutas públicas que no requieren iniciar sesión
-                        .requestMatchers("/","/login", "/usuarios/new", "/usuarios/registro", "/css/**", "/js/**","/img/**", "/images/**","/static/img/**").permitAll()
+                        .requestMatchers("/","/login", "/usuarios/new", "/usuarios/registro", "/css/**", "/js/**","/img/**").permitAll()
+                        // Permitir que el formulario de guardar usuario funcione por POST sin loguearse
+                        .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
                         // Cualquier otra ruta requiere autenticación
                         .anyRequest().authenticated()
                 )

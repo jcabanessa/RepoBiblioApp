@@ -12,6 +12,11 @@
                 <div class="card-body">
                     <h3 class="text-center mb-4 fw-bold text-shadow" style="font-family: 'Georgia', serif;">Iniciar Sesión</h3>
 
+                    <!-- Aviso informativo para accesos restringidos -->
+                    <div class="alert alert-warning py-2 small text-center mb-3" role="alert">
+                        🔒 Debes iniciar sesión para gestionar libros, usuarios y préstamos.
+                    </div>
+
                     <!-- Alerta de error -->
                     <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show py-2" role="alert">
                         Correo o contraseña incorrectos.

@@ -75,7 +75,7 @@ public class UsuarioController {
         return "redirect:/usuarios";
     }
 
-    @PostMapping("/registro")
+    /*@PostMapping("/registro")
     public String registrarUsuario(@ModelAttribute("usuario") Usuario usuario) {
         // Encriptamos la contraseña antes de guardarla
         usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
@@ -86,5 +86,5 @@ public class UsuarioController {
     @GetMapping("/login")
     public String mostrarLogin() {
         return "login";
-    }
+    }*/
 }

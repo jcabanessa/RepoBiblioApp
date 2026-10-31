@@ -88,6 +88,7 @@
                 <!-- Si NO está autenticado: Mostrar botón de Login -->
                 <li class="nav-item ms-lg-3" sec:authorize="isAnonymous()">
                     <a class="btn btn-outline-light btn-sm px-3" th:href="@{/login}">Iniciar Sesión</a>
+                    <a class="btn btn-light btn-sm px-3 text-dark fw-semibold" th:href="@{/usuarios/new}">Registrarse</a>
                 </li>
 
                 <!-- Si SÍ está autenticado: Mostrar Nombre de Usuario y Botón de Logout -->
