@@ -75,16 +75,58 @@ public class PrestamoController {
             model.addAttribute("libros", libroRepository.findAll());
             return "prestamos/form";
         }
+
+        // 1. Recuperar el usuario y libro reales de la BD
+        if (prestamo.getUsuario() != null && prestamo.getUsuario().getUsuarioId() != null) {
+            Usuario usuarioReal = usuarioRepository.findById(prestamo.getUsuario().getUsuarioId())
+                    .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
+            prestamo.setUsuario(usuarioReal);
+        }
+
+        if (prestamo.getLibro() != null && prestamo.getLibro().getLibroId() != null) {
+            Libro libroReal = libroRepository.findById(prestamo.getLibro().getLibroId())
+                    .orElseThrow(() -> new IllegalArgumentException("Libro no encontrado"));
+            prestamo.setLibro(libroReal);
+        }
+
+        // 2. LÓGICA DE INVENTARIO Y STOCK
         if (prestamo.getPrestamoId() != null && prestamo.getPrestamoId() > 0) {
-            // Si estamos editando, mantenemos la fecha de préstamo original
+            // ESTAMOS EDITANDO
             Prestamo prestamoExistente = prestamoRepository.findById(prestamo.getPrestamoId()).orElse(null);
             if (prestamoExistente != null) {
                 prestamo.setFechaPrestamo(prestamoExistente.getFechaPrestamo());
+                // DETECCIÓN DE CAMBIO DE ESTADO A "Devuelto"
+                // Si antes estaba Activo (o cualquier otro) y ahora se marca como Devuelto
+                if (!"Devuelto".equalsIgnoreCase(prestamoExistente.getEstado())
+                        && "Devuelto".equalsIgnoreCase(prestamo.getEstado())) {
+
+                    Libro libro = prestamo.getLibro();
+                    libro.setCantidad(libro.getCantidad() + 1); // Devolvemos el ejemplar al stock
+                    libroRepository.save(libro);
+                }
             }
         } else {
-            // Si es nuevo, asignamos la fecha actual
+            // ES UN PRÉSTAMO NUEVO
+            Libro libro = prestamo.getLibro();
+
+            // Validar que hay stock disponible antes de prestar
+            if (libro.getCantidad() <= 0) {
+                result.rejectValue("libro", "error.libro", "No hay ejemplares disponibles de este libro.");
+                model.addAttribute("usuarios", usuarioRepository.findAll());
+                model.addAttribute("libros", libroRepository.findAll());
+                return "prestamos/form";
+            }
+
+            // Descontamos 1 al stock del libro
+            libro.setCantidad(libro.getCantidad() - 1);
+            libroRepository.save(libro);
+
             prestamo.setFechaPrestamo(new Date());
+            if (prestamo.getEstado() == null || prestamo.getEstado().isEmpty()) {
+                prestamo.setEstado("Activo");
+            }
         }
+
         prestamoRepository.save(prestamo);
         return "redirect:/prestamos";
     }
@@ -109,7 +151,17 @@ public class PrestamoController {
 
     @GetMapping("/admin/prestamos/delete/{id}")
     public String eliminarPrestamo(@PathVariable Integer id) {
-        prestamoRepository.deleteById(id);
+        Prestamo prestamo = prestamoRepository.findById(id).orElse(null);
+
+        if (prestamo != null && prestamo.getLibro() != null) {
+            // Al eliminar el préstamo (o registrar su devolución), devolvemos el ejemplar al stock
+            Libro libro = prestamo.getLibro();
+            libro.setCantidad(libro.getCantidad() + 1);
+            libroRepository.save(libro);
+
+            prestamoRepository.deleteById(id);
+        }
+
         return "redirect:/prestamos";
     }
 

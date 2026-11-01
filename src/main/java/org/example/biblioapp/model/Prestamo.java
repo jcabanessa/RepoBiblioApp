@@ -30,13 +30,14 @@ public class Prestamo {
         }
     }
 
-    // VALIDACIÓN: Comprueba que la fecha de devolución sea posterior a la de préstamo
-    @AssertTrue(message = "La fecha de devolución debe ser posterior a la fecha de préstamo")
+    // VALIDACIÓN: Permite que la fecha de devolución sea igual o posterior a la de préstamo
+    @AssertTrue(message = "La fecha de devolución debe ser posterior o igual a la fecha de préstamo")
     public boolean isFechaDevolucionValida() {
         if (fechaPrestamo == null || fechaDevolucion == null) {
-            return true; // Si alguna está vacía, dejamos que otras validaciones actúen
+            return true;
         }
-        return fechaDevolucion.after(fechaPrestamo);
+        // Usamos !before() para aceptar el mismo día (iguales o posteriores)
+        return !fechaDevolucion.before(fechaPrestamo);
     }
 
     private String estado;
