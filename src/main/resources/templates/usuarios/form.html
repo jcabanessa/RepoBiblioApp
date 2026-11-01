@@ -15,12 +15,25 @@
         <div class="col-md-6">
 
             <h1 class="mb-4 text-center" th:text="${usuario.usuarioId} != null and ${usuario.usuarioId} != 0 ? 'Editar Usuario' : 'Nuevo Usuario'">Formulario de Usuario</h1>
+            <!-- Alerta de Error (si intenta cambiar el correo u ocurre algo) -->
+            <div th:if="${error}" class="alert alert-danger alert-dismissible fade show shadow-sm" role="alert">
+                <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                <span th:text="${error}">Mensaje de error</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <!-- Alerta de Éxito -->
+            <div th:if="${exito}" class="alert alert-success alert-dismissible fade show shadow-sm" role="alert">
+                <i class="bi bi-check-circle-fill me-2"></i>
+                <span th:text="${exito}">Mensaje de éxito</span>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
 
             <div class="card shadow-sm border-0">
                 <div class="card-body p-4">
 
                     <!-- Formulario apuntando al controlador POST /usuarios -->
-                    <form th:action="${usuario.usuarioId == null} ? @{/usuarios/registro} : @{/admin/usuarios}" th:object="${usuario}" method="post">
+                    <form th:action="${esPerfil != null && esPerfil} ? @{/usuarios/perfil} : (${usuario.usuarioId == null} ? @{/usuarios/registro} : @{/admin/usuarios})" th:object="${usuario}" method="post">
 
                         <input type="hidden" th:field="*{usuarioId}" />
 
@@ -46,12 +59,23 @@
                             <input type="tel" class="form-control" th:field="*{telefono}" placeholder="Ej. 600123456" />
                         </div>
 
-                        <div class="mb-3">
+                        <!-- 1. SI ES EL PERFIL PERSONAL: Mostramos el rol en modo solo lectura -->
+                        <div class="mb-3" th:if="${esPerfil != null && esPerfil}">
+                            <label class="form-label fw-bold">Rol:</label>
+                            <input type="text" class="form-control" th:field="*{rol}" readonly style="background-color: #e9ecef;" />
+                        </div>
+
+                        <!-- 2. SI ES EL PANEL DE ADMIN: Mostramos el selector para elegir USER o ADMIN -->
+                        <div class="mb-3" th:if="${esPerfil == null}">
                             <label class="form-label fw-bold">Rol:</label>
                             <select class="form-select" th:field="*{rol}">
                                 <option value="USER">USER (Usuario Estándar)</option>
+                                <option value="ADMIN">ADMIN (Administrador)</option>
                             </select>
                         </div>
+
+                        <!-- 3. SI ES REGISTRO PÚBLICO: Enviamos el rol USER de forma oculta y automática -->
+                        <input type="hidden" th:if="${esPerfil != null && !esPerfil}" th:field="*{rol}" value="USER" />
 
                         <div class="mb-3">
                             <label class="form-label fw-bold">Contraseña:</label>
@@ -60,7 +84,8 @@
                         </div>
 
                         <div class="d-flex justify-content-between">
-                            <a th:href="@{/admin/usuarios}" class="btn btn-outline-secondary">Cancelar</a>
+                            <!-- El botón cancelar redirige al inicio si es perfil, o al panel de admin si gestiona un administrador -->
+                            <a th:href="${esPerfil != null && esPerfil} ? @{/} : @{/admin/usuarios}" class="btn btn-outline-secondary">Cancelar</a>
                             <button type="submit" class="btn btn-success">Guardar Usuario</button>
                         </div>
 

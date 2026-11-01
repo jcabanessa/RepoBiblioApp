@@ -93,7 +93,9 @@
 
                 <!-- Si SÍ está autenticado: Mostrar Nombre y Botón de Cerrar Sesión directamente -->
                 <li class="nav-item ms-lg-3 d-flex align-items-center gap-3" sec:authorize="isAuthenticated()">
-                    <span class="text-light">👤 <span sec:authentication="name">Usuario</span></span>
+                    <a th:href="@{/usuarios/perfil}" class="text-light text-decoration-none fw-semibold">
+                        👤 <span sec:authentication="name">Usuario</span> ⚙️
+                    </a>
 
                     <form th:action="@{/logout}" method="post" class="m-0">
                         <button type="submit" class="btn btn-sm btn-outline-danger">Cerrar Sesión</button>
