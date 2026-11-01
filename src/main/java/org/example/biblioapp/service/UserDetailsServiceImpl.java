@@ -18,15 +18,16 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         // Usamos el email como identificador de acceso
-        Usuario usuario = usuarioRepository.findAll().stream()
-                .filter(u -> u.getEmail().equals(email))
-                .findFirst()
+        Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado con email: " + email));
+
+        // Obtenemos el rol del usuario (por defecto USER si es nulo)
+        String rol = (usuario.getRol() != null && !usuario.getRol().isEmpty()) ? usuario.getRol() : "USER";
 
         return User.builder()
                 .username(usuario.getEmail())
                 .password(usuario.getPassword())
-                .roles("USER") // Rol básico por defecto
+                .roles(rol)
                 .build();
     }
 }

@@ -9,16 +9,18 @@ import org.example.biblioapp.repository.UsuarioRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.StringTrimmerEditor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.Date;
 
 @Controller
-@RequestMapping("/prestamos")
 public class PrestamoController {
 
     @Autowired
@@ -30,13 +32,29 @@ public class PrestamoController {
     @Autowired
     private LibroRepository libroRepository;
 
-    @GetMapping
-    public String listarPrestamos(Model model) {
-        model.addAttribute("prestamos", prestamoRepository.findAll());
+    @GetMapping("/prestamos")
+    public String listarPrestamos(Model model, Principal principal) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        boolean isAdmin = auth.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ADMIN") || a.getAuthority().contains("ADMIN"));
+
+        if (isAdmin) {
+            // Si es ADMIN, ve todos los préstamos de la biblioteca
+            model.addAttribute("prestamos", prestamoRepository.findAll());
+        } else {
+            // Si es USER, ve únicamente sus propios préstamos basándonos en su email (principal.getName())
+            String email = principal.getName();
+            Usuario usuario = usuarioRepository.findByEmail(email).orElse(null);
+            if (usuario != null) {
+                model.addAttribute("prestamos", prestamoRepository.findByUsuario(usuario));
+            } else {
+                model.addAttribute("prestamos", java.util.Collections.emptyList());
+            }
+        }
         return "prestamos/lista";
     }
 
-    @GetMapping("/new")
+    @GetMapping("/admin/prestamos/new")
     public String mostrarFormularioCreacion(Model model) {
         Prestamo prestamo = new Prestamo();
         prestamo.setFechaPrestamo(new Date());
@@ -47,7 +65,7 @@ public class PrestamoController {
         return "prestamos/form";
     }
 
-    @PostMapping
+    @PostMapping("/admin/prestamos")
     public String guardarPrestamo(@Valid @ModelAttribute("prestamo") Prestamo prestamo,
                                   BindingResult result,
                                   Model model) {
@@ -71,7 +89,7 @@ public class PrestamoController {
         return "redirect:/prestamos";
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/admin/prestamos/edit/{id}")
     public String mostrarFormularioEdicion(@PathVariable Integer id,Model model) {
         Prestamo prestamo = prestamoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("ID de préstamo inválido: " + id));
@@ -89,7 +107,7 @@ public class PrestamoController {
         return "prestamos/form";
     }
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("/admin/prestamos/delete/{id}")
     public String eliminarPrestamo(@PathVariable Integer id) {
         prestamoRepository.deleteById(id);
         return "redirect:/prestamos";

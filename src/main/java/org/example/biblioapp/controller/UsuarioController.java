@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 
 @Controller
-@RequestMapping("/usuarios")
+@RequestMapping("/admin/usuarios")
 public class UsuarioController {
 
     @Autowired
@@ -57,7 +57,7 @@ public class UsuarioController {
             }
         }
         usuarioRepository.save(usuario);
-        return "redirect:/usuarios";
+        return "redirect:/admin/usuarios";
     }
 
     @GetMapping("/edit/{id}")
@@ -72,6 +72,6 @@ public class UsuarioController {
     @GetMapping("/delete/{id}")
     public String eliminarUsuario(@PathVariable Integer id) {
         usuarioRepository.deleteById(id);
-        return "redirect:/usuarios";
+        return "redirect:/admin/usuarios";
     }
 }

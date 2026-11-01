@@ -8,31 +8,30 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/libros")
 public class LibroController {
 
     @Autowired
     private LibroRepository libroRepository;
 
-    @GetMapping
+    @GetMapping("/libros")
     public String listarLibros(Model model) {
         model.addAttribute("libros", libroRepository.findAll());
         return "libros/lista";
     }
 
-    @GetMapping("/new")
+    @GetMapping("/admin/libros/new")
     public String mostrarFormularioCreacion(Model model) {
         model.addAttribute("libro", new Libro());
         return "libros/form";
     }
 
-    @PostMapping
+    @PostMapping("/admin/libros")
     public String guardarLibro(@ModelAttribute("libro") Libro libro) {
         libroRepository.save(libro);
         return "redirect:/libros";
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/admin/libros/edit/{id}")
     public String mostrarFormularioEdicion(@PathVariable Integer id, Model model) {
         Libro libro = libroRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("ID de libro inválido: " + id));
@@ -40,7 +39,7 @@ public class LibroController {
         return "libros/form";
     }
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("/admin/libros/delete/{id}")
     public String eliminarLibro(@PathVariable Integer id) {
         libroRepository.deleteById(id);
         return "redirect:/libros";

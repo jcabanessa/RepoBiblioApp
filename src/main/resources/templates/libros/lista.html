@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <!-- 1. Cargamos el fragmento del head (Bootstrap y título) -->
 <head th:replace="~{fragmentos :: cabecera('Lista de Libros')}"></head>
@@ -16,7 +16,7 @@
   <h1 class="mb-4">Gestión de Libros</h1>
 
   <!-- Botón para crear un nuevo libro -->
-  <a th:href="@{/libros/new}" class="btn btn-primary mb-3 shadow-sm">+ Nuevo Libro</a>
+  <a th:href="@{/admin/libros/new}" class="btn btn-primary mb-3 shadow-sm" sec:authorize="hasRole('ADMIN')">+ Nuevo Libro</a>
 
   <!-- Tabla con diseño Bootstrap y fondo blanco -->
   <div class="table-responsive shadow-sm">
@@ -28,7 +28,7 @@
         <th>Autor</th>
         <th>ISBN</th>
         <th>Cantidad</th>
-        <th>Acciones</th>
+        <th sec:authorize="hasRole('ADMIN')">Acciones</th>
       </tr>
       </thead>
       <tbody>
@@ -38,10 +38,11 @@
         <td th:text="${libro.autor}">Autor de ejemplo</td>
         <td th:text="${libro.isbn}">ISBN</td>
         <td th:text="${libro.cantidad}">0</td>
-        <td>
+
+        <td sec:authorize="hasRole('ADMIN')">
           <!-- Botones de acción -->
-          <a th:href="@{/libros/edit/{id}(id=${libro.libroId})}" class="btn btn-warning btn-sm">Editar</a>
-          <a th:href="@{/libros/delete/{id}(id=${libro.libroId})}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este libro?')">Eliminar</a>
+          <a th:href="@{/admin/libros/edit/{id}(id=${libro.libroId})}" class="btn btn-warning btn-sm" >Editar</a>
+          <a th:href="@{/admin/libros/delete/{id}(id=${libro.libroId})}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este libro?')">Eliminar</a>
         </td>
       </tr>
       </tbody>

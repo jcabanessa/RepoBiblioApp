@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <!-- 1. Cargamos el fragmento del head -->
 <head th:replace="~{fragmentos :: cabecera('Lista de Préstamos')}"></head>
@@ -15,7 +15,7 @@
     <h1 class="mb-4">Gestión de Préstamos</h1>
 
     <!-- Botón para registrar un nuevo préstamo -->
-    <a th:href="@{/prestamos/new}" class="btn btn-primary mb-3 shadow-sm">+ Nuevo Préstamo</a>
+    <a th:href="@{/admin/prestamos/new}" class="btn btn-primary mb-3 shadow-sm" sec:authorize="hasRole('ADMIN')">+ Nuevo Préstamo</a>
 
     <!-- Tabla interactiva -->
     <div class="table-responsive shadow-sm">
@@ -28,7 +28,7 @@
                 <th>Fecha Préstamo</th>
                 <th>Fecha Devolución</th>
                 <th>Estado</th>
-                <th>Acciones</th>
+                <th sec:authorize="hasRole('ADMIN')">Acciones</th>
             </tr>
             </thead>
             <tbody>
@@ -49,10 +49,10 @@
                     </span>
                 </td>
 
-                <td>
+                <td sec:authorize="hasRole('ADMIN')">
                     <!-- Botones de acción apuntando a las rutas de préstamos -->
-                    <a th:href="@{/prestamos/edit/{id}(id=${prestamo.prestamoId})}" class="btn btn-warning btn-sm">Editar</a>
-                    <a th:href="@{/prestamos/delete/{id}(id=${prestamo.prestamoId})}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de registrar la devolución / eliminar este préstamo?')">Eliminar</a>
+                    <a th:href="@{/admin/prestamos/edit/{id}(id=${prestamo.prestamoId})}" class="btn btn-warning btn-sm">Editar</a>
+                    <a th:href="@{/admin/prestamos/delete/{id}(id=${prestamo.prestamoId})}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de registrar la devolución / eliminar este préstamo?')">Eliminar</a>
                 </td>
             </tr>
             </tbody>

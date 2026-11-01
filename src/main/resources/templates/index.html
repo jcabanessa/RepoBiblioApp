@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <!-- 1. Cargamos el fragmento de la cabecera -->
 <head th:replace="~{fragmentos :: cabecera('Spring Library - Inicio')}"></head>
@@ -32,12 +32,12 @@
         </div>
 
         <!-- Módulo de Usuarios -->
-        <div class="col-md-4 mb-4">
+        <div class="col-md-4 mb-4" sec:authorize="hasRole('ADMIN')">
             <div class="card shadow-sm border-0 h-100">
                 <div class="card-body p-4 d-flex flex-column">
                     <h2 class="h3 mb-3">👤 Usuarios</h2>
                     <p class="text-muted flex-grow-1">Administra el registro de lectores y actualiza sus datos de contacto.</p>
-                    <a th:href="@{/usuarios}" class="btn btn-primary w-100 mt-auto">Gestionar Usuarios</a>
+                    <a th:href="@{/admin/usuarios}" class="btn btn-primary w-100 mt-auto">Gestionar Usuarios</a>
                 </div>
             </div>
         </div>

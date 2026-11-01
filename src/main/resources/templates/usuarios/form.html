@@ -20,7 +20,7 @@
                 <div class="card-body p-4">
 
                     <!-- Formulario apuntando al controlador POST /usuarios -->
-                    <form th:action="@{/usuarios}" th:object="${usuario}" method="post">
+                    <form th:action="${usuario.usuarioId == null} ? @{/usuarios/registro} : @{/admin/usuarios}" th:object="${usuario}" method="post">
 
                         <input type="hidden" th:field="*{usuarioId}" />
 
@@ -47,13 +47,20 @@
                         </div>
 
                         <div class="mb-3">
+                            <label class="form-label fw-bold">Rol:</label>
+                            <select class="form-select" th:field="*{rol}">
+                                <option value="USER">USER (Usuario Estándar)</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
                             <label class="form-label fw-bold">Contraseña:</label>
                             <input type="password" class="form-control" th:field="*{password}" placeholder="••••••••" />
                             <div class="form-text text-muted">Deja en blanco si no deseas cambiar la contraseña al editar.</div>
                         </div>
 
                         <div class="d-flex justify-content-between">
-                            <a th:href="@{/usuarios}" class="btn btn-outline-secondary">Cancelar</a>
+                            <a th:href="@{/admin/usuarios}" class="btn btn-outline-secondary">Cancelar</a>
                             <button type="submit" class="btn btn-success">Guardar Usuario</button>
                         </div>
 

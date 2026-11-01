@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <!-- Cargamos el fragmento de la cabecera con el título de la página -->
 <head th:replace="~{fragmentos :: cabecera('Lista de Usuarios')}"></head>
@@ -14,7 +14,7 @@
     <h1 class="mb-4">Gestión de Usuarios</h1>
 
     <!-- Botón para añadir un nuevo usuario -->
-    <a th:href="@{/usuarios/new}" class="btn btn-primary mb-3 shadow-sm">+ Nuevo Usuario</a>
+    <a th:href="@{/admin/usuarios/new}" class="btn btn-primary mb-3 shadow-sm" sec:authorize="hasRole('ADMIN')">+ Nuevo Usuario</a>
 
     <!-- Tabla de usuarios con diseño Bootstrap -->
     <div class="table-responsive shadow-sm">
@@ -26,7 +26,8 @@
                 <th>Apellidos</th>
                 <th>Correo Electrónico</th>
                 <th>Teléfono</th>
-                <th>Acciones</th>
+                <th>Rol</th>
+                <th sec:authorize="hasRole('ADMIN')">Acciones</th>
             </tr>
             </thead>
             <tbody>
@@ -37,9 +38,15 @@
                 <td th:text="${usuario.email}">ejemplo@correo.com</td>
                 <td th:text="${usuario.telefono}">600123456</td>
                 <td>
-                    <!-- Enlaces de acción que apuntan al controlador de usuarios -->
-                    <a th:href="@{/usuarios/edit/{id}(id=${usuario.usuarioId})}" class="btn btn-warning btn-sm">Editar</a>
-                    <a th:href="@{/usuarios/delete/{id}(id=${usuario.usuarioId})}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este usuario? Si tiene préstamos activos podría generar un error.')">Eliminar</a>
+                    <span th:text="${usuario.rol}"
+                          th:class="${usuario.rol == 'ADMIN'} ? 'badge bg-danger' : 'badge bg-secondary'">
+                        USER
+                    </span>
+                </td>
+                <td sec:authorize="hasRole('ADMIN')">
+                    <!-- Enlaces apuntando a /admin/usuarios/... -->
+                    <a th:href="@{/admin/usuarios/edit/{id}(id=${usuario.usuarioId})}" class="btn btn-warning btn-sm">Editar</a>
+                    <a th:href="@{/admin/usuarios/delete/{id}(id=${usuario.usuarioId})}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este usuario?')">Eliminar</a>
                 </td>
             </tr>
             </tbody>

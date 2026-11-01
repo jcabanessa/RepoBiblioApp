@@ -19,6 +19,7 @@ public class Usuario {
     private String email;
     private String telefono;
     private String password;
+    private String rol = "USER";
 
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -47,6 +48,8 @@ public class Usuario {
     public void setTelefono(String telefono) { this.telefono = telefono; }
     public String getPassword() { return password; }
     public void setPassword(String password) { this.password = password; }
+    public String getRol() { return rol; }
+    public void setRol(String rol) { this.rol = rol; }
     public Date getFechaRegistro() { return fechaRegistro; }
     public void setFechaRegistro(Date fechaRegistro) { this.fechaRegistro = fechaRegistro; }
 

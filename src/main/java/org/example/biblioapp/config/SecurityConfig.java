@@ -21,6 +21,12 @@ public class SecurityConfig {
                         .requestMatchers("/","/login", "/usuarios/new", "/usuarios/registro", "/css/**", "/js/**","/img/**").permitAll()
                         // Permitir que el formulario de guardar usuario funcione por POST sin loguearse
                         .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
+                        // 1. Zona exclusiva para administradores (CRUD completo)
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        // 2. Zona para usuarios registrados
+                        // 3. Zona para Usuarios autenticados (USER y ADMIN pueden ver catálogos y listados generales)
+                        .requestMatchers("/libros/**", "/prestamos/**").authenticated()
+                        /*.requestMatchers("/user/**").hasAnyRole("USER", "ADMIN")*/
                         // Cualquier otra ruta requiere autenticación
                         .anyRequest().authenticated()
                 )
