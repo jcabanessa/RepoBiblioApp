@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabecera('Registro de usuario')}"></head>
+<body class="fondo-biblioteca">
+<div th:replace="~{fragmentos :: menu-superior}"></div>
+<div class="container">
+    <div class="card card-soft auth-card">
+        <div class="card-body p-4 p-md-5">
+            <h1 class="h3 text-center mb-4">Crear cuenta</h1>
+            <form th:action="@{/register}" th:object="${registroForm}" method="post">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Nombre</label>
+                        <input class="form-control" th:field="*{nombre}">
+                        <div class="text-danger small" th:errors="*{nombre}"></div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Apellidos</label>
+                        <input class="form-control" th:field="*{apellidos}">
+                        <div class="text-danger small" th:errors="*{apellidos}"></div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Correo electrónico</label>
+                    <input type="email" class="form-control" th:field="*{email}">
+                    <div class="text-danger small" th:errors="*{email}"></div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Teléfono</label>
+                    <input class="form-control" th:field="*{telefono}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" th:field="*{password}">
+                    <div class="text-danger small" th:errors="*{password}"></div>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Repetir contraseña</label>
+                    <input type="password" class="form-control" th:field="*{confirmarPassword}">
+                    <div class="text-danger small" th:errors="*{confirmarPassword}"></div>
+                </div>
+                <button class="btn btn-success w-100" type="submit">Registrarme</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

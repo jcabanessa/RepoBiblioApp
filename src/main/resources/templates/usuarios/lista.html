@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabecera('Usuarios')}"></head>
+<body class="fondo-biblioteca-gestion">
+<div th:replace="~{fragmentos :: menu-superior}"></div>
+<main class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h2 page-title mb-0">Administración de usuarios</h1>
+        <a th:href="@{/admin/usuarios/new}" class="btn btn-primary">+ Nuevo usuario</a>
+    </div>
+
+    <div th:if="${param.saved}" class="alert alert-success">Usuario guardado correctamente.</div>
+    <div th:if="${param.deleted}" class="alert alert-success">Usuario eliminado correctamente.</div>
+    <div th:if="${param.deleteError != null and param.deleteError[0] == 'self'}" class="alert alert-warning">No puedes eliminar tu propia cuenta mientras estás autenticado.</div>
+    <div th:if="${param.deleteError != null and param.deleteError[0] == 'prestamos'}" class="alert alert-warning">No se puede eliminar un usuario con préstamos asociados.</div>
+
+    <div class="table-wrap">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle mb-0">
+                <thead class="table-dark">
+                <tr><th>ID</th><th>Nombre</th><th>Email</th><th>Teléfono</th><th>Rol</th><th>Registro</th><th>Acciones</th></tr>
+                </thead>
+                <tbody>
+                <tr th:each="usuario : ${usuarios}">
+                    <td th:text="${usuario.usuarioId}"></td>
+                    <td th:text="${usuario.nombre + ' ' + usuario.apellidos}"></td>
+                    <td th:text="${usuario.email}"></td>
+                    <td th:text="${usuario.telefono}"></td>
+                    <td><span class="badge text-bg-secondary badge-role" th:text="${usuario.rol}"></span></td>
+                    <td th:text="${usuario.fechaRegistro}"></td>
+                    <td>
+                        <a th:href="@{/admin/usuarios/edit/{id}(id=${usuario.usuarioId})}" class="btn btn-warning btn-sm">Editar</a>
+                        <form th:action="@{/admin/usuarios/delete/{id}(id=${usuario.usuarioId})}" method="post" class="d-inline"
+                              onsubmit="return confirm('¿Eliminar este usuario?');">
+                            <button class="btn btn-danger btn-sm" type="submit">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+</body>
+</html>

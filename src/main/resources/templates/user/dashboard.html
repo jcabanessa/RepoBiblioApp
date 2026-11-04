@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabecera('Mi área')}"></head>
+<body class="fondo-biblioteca-gestion">
+<div th:replace="~{fragmentos :: menu-superior}"></div>
+<main class="container py-4">
+    <h1 class="h2 page-title mb-4">Mi área</h1>
+    <div class="row g-4">
+        <div class="col-md-5">
+            <div class="card card-soft h-100">
+                <div class="card-body">
+                    <h2 class="h5">Datos de usuario</h2>
+                    <p class="mb-1"><strong>Nombre:</strong> <span th:text="${usuario.nombre + ' ' + usuario.apellidos}"></span></p>
+                    <p class="mb-1"><strong>Email:</strong> <span th:text="${usuario.email}"></span></p>
+                    <p class="mb-1"><strong>Teléfono:</strong> <span th:text="${usuario.telefono}"></span></p>
+                    <p class="mb-0"><strong>Rol:</strong> <span th:text="${usuario.rol}"></span></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="card card-soft h-100">
+                <div class="card-body">
+                    <h2 class="h5">Préstamos asociados</h2>
+                    <p class="display-6" th:text="${#lists.size(prestamos)}">0</p>
+                    <a th:href="@{/user/prestamos}" class="btn btn-primary">Ver mis préstamos</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

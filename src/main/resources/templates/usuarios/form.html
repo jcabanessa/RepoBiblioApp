@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabecera(${usuarioForm.usuarioId} == null ? 'Nuevo usuario' : 'Editar usuario')}"></head>
+<body class="fondo-biblioteca-gestion">
+<div th:replace="~{fragmentos :: menu-superior}"></div>
+<main class="container py-4">
+    <div class="card card-soft mx-auto" style="max-width: 720px;">
+        <div class="card-body p-4">
+            <h1 class="h3 mb-4" th:text="${usuarioForm.usuarioId} == null ? 'Nuevo usuario' : 'Editar usuario'"></h1>
+            <form th:action="@{/admin/usuarios/save}" th:object="${usuarioForm}" method="post">
+                <input type="hidden" th:field="*{usuarioId}">
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Nombre</label>
+                        <input class="form-control" th:field="*{nombre}">
+                        <div class="text-danger small" th:errors="*{nombre}"></div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Apellidos</label>
+                        <input class="form-control" th:field="*{apellidos}">
+                        <div class="text-danger small" th:errors="*{apellidos}"></div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Correo electrónico</label>
+                    <input type="email" class="form-control" th:field="*{email}">
+                    <div class="text-danger small" th:errors="*{email}"></div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Teléfono</label>
+                    <input class="form-control" th:field="*{telefono}">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Rol</label>
+                    <select class="form-select" th:field="*{rol}">
+                        <option th:each="rol : ${roles}" th:value="${rol}" th:text="${rol}"></option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Contraseña</label>
+                    <input type="password" class="form-control" th:field="*{password}">
+                    <div class="form-text" th:text="${usuarioForm.usuarioId} == null ? 'Mínimo 8 caracteres.' : 'Déjala vacía para conservar la contraseña actual.'"></div>
+                    <div class="text-danger small" th:errors="*{password}"></div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <a th:href="@{/usuarios}" class="btn btn-outline-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+</body>
+</html>

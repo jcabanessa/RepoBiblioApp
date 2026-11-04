@@ -1,0 +1,53 @@
+body {
+    min-height: 100vh;
+    background: #f4f5f7;
+}
+
+body.fondo-biblioteca,
+body.fondo-biblioteca-gestion {
+    position: relative;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+body.fondo-biblioteca::before,
+body.fondo-biblioteca-gestion::before {
+    content: "";
+    position: fixed;
+    inset: -20px;
+    background-image: linear-gradient(rgba(15, 23, 42, .58), rgba(15, 23, 42, .58)),
+    url('/img/006-library-biblioteca-angelica-a-roma_0002.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+}
+
+body.fondo-biblioteca-gestion::before {
+    filter: blur(3px);
+}
+
+.page-title {
+    color: white;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, .55);
+}
+
+.card-soft {
+    border: 0;
+    box-shadow: 0 .5rem 1.5rem rgba(15, 23, 42, .15);
+}
+
+.table-wrap {
+    background: white;
+    border-radius: .75rem;
+    overflow: hidden;
+    box-shadow: 0 .5rem 1.5rem rgba(15, 23, 42, .16);
+}
+
+.auth-card {
+    max-width: 520px;
+    margin: 3rem auto;
+}
+
+.badge-role {
+    letter-spacing: .03em;
+}

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabecera('Iniciar sesión')}"></head>
+<body class="fondo-biblioteca">
+<div th:replace="~{fragmentos :: menu-superior}"></div>
+<div class="container">
+    <div class="card card-soft auth-card">
+        <div class="card-body p-4 p-md-5">
+            <h1 class="h3 text-center mb-4">Iniciar sesión</h1>
+            <div th:if="${param.error}" class="alert alert-danger">Email o contraseña incorrectos.</div>
+            <div th:if="${param.registered}" class="alert alert-success">Registro completado. Ya puedes iniciar sesión.</div>
+            <form th:action="@{/login}" method="post">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Correo electrónico</label>
+                    <input id="email" name="email" type="email" class="form-control" required autofocus>
+                </div>
+                <div class="mb-4">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input id="password" name="password" type="password" class="form-control" required>
+                </div>
+                <button class="btn btn-primary w-100" type="submit">Entrar</button>
+            </form>
+            <p class="text-center mt-3 mb-0">¿No tienes cuenta? <a th:href="@{/register}">Regístrate</a></p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

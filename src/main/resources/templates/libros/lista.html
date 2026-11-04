@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabecera('Lista de libros')}"></head>
+<body class="fondo-biblioteca-gestion">
+<div th:replace="~{fragmentos :: menu-superior}"></div>
+<main class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h2 page-title mb-0">Gestión de libros</h1>
+        <a th:if="${esAdmin}" th:href="@{/admin/libros/new}" class="btn btn-primary">+ Nuevo libro</a>
+    </div>
+
+    <div th:if="${param.saved}" class="alert alert-success">Libro guardado correctamente.</div>
+    <div th:if="${param.deleted}" class="alert alert-success">Libro eliminado correctamente.</div>
+    <div th:if="${param.deleteError}" class="alert alert-warning">No se puede eliminar un libro con préstamos asociados.</div>
+
+    <div class="table-wrap">
+        <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle mb-0">
+                <thead class="table-dark">
+                <tr>
+                    <th>ID</th><th>Título</th><th>Autor</th><th>ISBN</th><th>Cantidad</th>
+                    <th th:if="${esAdmin}">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="libro : ${libros}">
+                    <td th:text="${libro.libroId}"></td>
+                    <td th:text="${libro.titulo}"></td>
+                    <td th:text="${libro.autor}"></td>
+                    <td th:text="${libro.isbn}"></td>
+                    <td th:text="${libro.cantidad}"></td>
+                    <td th:if="${esAdmin}">
+                        <a th:href="@{/admin/libros/edit/{id}(id=${libro.libroId})}" class="btn btn-warning btn-sm">Editar</a>
+                        <form th:action="@{/admin/libros/delete/{id}(id=${libro.libroId})}" method="post" class="d-inline"
+                              onsubmit="return confirm('¿Eliminar este libro?');">
+                            <button class="btn btn-danger btn-sm" type="submit">Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(libros)}">
+                    <td th:colspan="${esAdmin ? 6 : 5}" class="text-center text-muted py-4">No hay libros registrados.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+</body>
+</html>

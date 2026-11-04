@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabecera('Acceso denegado')}"></head>
+<body class="fondo-biblioteca">
+<div th:replace="~{fragmentos :: menu-superior}"></div>
+<div class="container py-5">
+    <div class="alert alert-danger card-soft">
+        <h1 class="h4">Acceso denegado</h1>
+        <p class="mb-3">Tu usuario no dispone del rol necesario para acceder a esta zona.</p>
+        <a th:href="@{/}" class="btn btn-dark">Volver al inicio</a>
+    </div>
+</div>
+</body>
+</html>

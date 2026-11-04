@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabecera('Spring Library - Inicio')}"></head>
+<body class="fondo-biblioteca">
+<div th:replace="~{fragmentos :: menu-superior}"></div>
+
+<main class="container py-5">
+    <section class="text-center text-white mb-5">
+        <h1 class="display-4 fw-bold">Spring Library App</h1>
+        <p class="lead">Gestión de libros, usuarios y préstamos con Spring Boot, JPA, Thymeleaf y Spring Security.</p>
+    </section>
+
+    <div th:if="${param.logout}" class="alert alert-success">Sesión cerrada correctamente.</div>
+
+    <div class="row g-4 justify-content-center">
+        <div class="col-md-4">
+            <div class="card card-soft h-100">
+                <div class="card-body p-4 d-flex flex-column">
+                    <h2 class="h4">📚 Catálogo</h2>
+                    <p class="text-muted flex-grow-1">Consulta el catálogo de libros disponibles.</p>
+                    <a th:if="${autenticado}" th:href="@{/libros}" class="btn btn-primary">Ver libros</a>
+                    <a th:if="${!autenticado}" th:href="@{/login}" class="btn btn-primary">Acceder</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4" th:if="${autenticado and !esAdmin}">
+            <div class="card card-soft h-100">
+                <div class="card-body p-4 d-flex flex-column">
+                    <h2 class="h4">👤 Área de usuario</h2>
+                    <p class="text-muted flex-grow-1">Consulta tus datos y tus préstamos asociados.</p>
+                    <a th:href="@{/user}" class="btn btn-primary">Entrar en mi área</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4" th:if="${esAdmin}">
+            <div class="card card-soft h-100">
+                <div class="card-body p-4 d-flex flex-column">
+                    <h2 class="h4">🛠 Administración</h2>
+                    <p class="text-muted flex-grow-1">Gestiona usuarios, libros y préstamos con permisos ADMIN.</p>
+                    <a th:href="@{/usuarios}" class="btn btn-dark">Panel de administración</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4" th:if="${!autenticado}">
+            <div class="card card-soft h-100">
+                <div class="card-body p-4 d-flex flex-column">
+                    <h2 class="h4">📝 Registro</h2>
+                    <p class="text-muted flex-grow-1">Crea una cuenta de usuario para acceder al área privada.</p>
+                    <a th:href="@{/register}" class="btn btn-success">Crear cuenta</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabecera(${libro.libroId} == null ? 'Nuevo libro' : 'Editar libro')}"></head>
+<body class="fondo-biblioteca-gestion">
+<div th:replace="~{fragmentos :: menu-superior}"></div>
+<main class="container py-4">
+    <div class="card card-soft mx-auto" style="max-width: 680px;">
+        <div class="card-body p-4">
+            <h1 class="h3 mb-4" th:text="${libro.libroId} == null ? 'Nuevo libro' : 'Editar libro'"></h1>
+            <form th:action="@{/admin/libros/save}" th:object="${libro}" method="post">
+                <input type="hidden" th:field="*{libroId}">
+                <div class="mb-3">
+                    <label class="form-label">Título</label>
+                    <input class="form-control" th:field="*{titulo}">
+                    <div class="text-danger small" th:errors="*{titulo}"></div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Autor</label>
+                    <input class="form-control" th:field="*{autor}">
+                    <div class="text-danger small" th:errors="*{autor}"></div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">ISBN</label>
+                    <input class="form-control" th:field="*{isbn}">
+                    <div class="text-danger small" th:errors="*{isbn}"></div>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Cantidad disponible</label>
+                    <input type="number" min="0" class="form-control" th:field="*{cantidad}">
+                    <div class="text-danger small" th:errors="*{cantidad}"></div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <a th:href="@{/libros}" class="btn btn-outline-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+</body>
+</html>

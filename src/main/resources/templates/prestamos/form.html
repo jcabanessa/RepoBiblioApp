@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabecera(${prestamoForm.prestamoId} == null ? 'Nuevo préstamo' : 'Editar préstamo')}"></head>
+<body class="fondo-biblioteca-gestion">
+<div th:replace="~{fragmentos :: menu-superior}"></div>
+<main class="container py-4">
+    <div class="card card-soft mx-auto" style="max-width: 760px;">
+        <div class="card-body p-4">
+            <h1 class="h3 mb-4" th:text="${prestamoForm.prestamoId} == null ? 'Nuevo préstamo' : 'Editar préstamo'"></h1>
+            <form th:action="@{/admin/prestamos/save}" th:object="${prestamoForm}" method="post">
+                <input type="hidden" th:field="*{prestamoId}">
+                <div class="mb-3">
+                    <label class="form-label">Usuario</label>
+                    <select class="form-select" th:field="*{usuarioId}">
+                        <option value="">-- Selecciona un usuario --</option>
+                        <option th:each="u : ${usuarios}" th:value="${u.usuarioId}" th:text="${u.nombre + ' ' + u.apellidos + ' · ' + u.email}"></option>
+                    </select>
+                    <div class="text-danger small" th:errors="*{usuarioId}"></div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Libro</label>
+                    <select class="form-select" th:field="*{libroId}">
+                        <option value="">-- Selecciona un libro --</option>
+                        <option th:each="l : ${libros}" th:value="${l.libroId}" th:text="${l.titulo + ' · ' + l.autor}"></option>
+                    </select>
+                    <div class="text-danger small" th:errors="*{libroId}"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Fecha de préstamo</label>
+                        <input type="date" class="form-control" th:field="*{fechaPrestamo}">
+                        <div class="text-danger small" th:errors="*{fechaPrestamo}"></div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Fecha de devolución</label>
+                        <input type="date" class="form-control" th:field="*{fechaDevolucion}">
+                        <div class="text-danger small" th:errors="*{fechaDevolucion}"></div>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <label class="form-label">Estado</label>
+                    <select class="form-select" th:field="*{estado}">
+                        <option th:each="estado : ${estados}" th:value="${estado}" th:text="${estado}"></option>
+                    </select>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <a th:href="@{/prestamos}" class="btn btn-outline-secondary">Cancelar</a>
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</main>
+</body>
+</html>

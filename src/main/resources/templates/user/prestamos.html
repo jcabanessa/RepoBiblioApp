@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabecera('Mis préstamos')}"></head>
+<body class="fondo-biblioteca-gestion">
+<div th:replace="~{fragmentos :: menu-superior}"></div>
+<main class="container py-4">
+    <h1 class="h2 page-title mb-3">Mis préstamos</h1>
+    <div class="table-wrap">
+        <div class="table-responsive">
+            <table class="table table-striped align-middle mb-0">
+                <thead class="table-dark"><tr><th>Libro</th><th>Fecha préstamo</th><th>Devolución</th><th>Estado</th></tr></thead>
+                <tbody>
+                <tr th:each="prestamo : ${prestamos}">
+                    <td th:text="${prestamo.libro.titulo}"></td>
+                    <td th:text="${prestamo.fechaPrestamo}"></td>
+                    <td th:text="${prestamo.fechaDevolucion}"></td>
+                    <td th:text="${prestamo.estado}"></td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(prestamos)}"><td colspan="4" class="text-center text-muted py-4">No tienes préstamos asociados.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+</body>
+</html>
