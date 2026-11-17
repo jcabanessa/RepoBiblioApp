@@ -14,7 +14,7 @@
     <h1 class="mb-4">Gestión de Usuarios</h1>
 
     <!-- Botón para añadir un nuevo usuario -->
-    <a th:href="@{/usuarios/new}" class="btn btn-primary mb-3 shadow-sm">+ Nuevo Usuario</a>
+    <a th:href="@{/admin/usuarios/new}" class="btn btn-primary mb-3 shadow-sm">+ Nuevo Usuario</a>
 
     <!-- Tabla de usuarios con diseño Bootstrap -->
     <div class="table-responsive shadow-sm">
@@ -38,8 +38,8 @@
                 <td th:text="${usuario.telefono}">600123456</td>
                 <td>
                     <!-- Enlaces de acción que apuntan al controlador de usuarios -->
-                    <a th:href="@{/usuarios/edit/{id}(id=${usuario.usuarioId})}" class="btn btn-warning btn-sm">Editar</a>
-                    <a th:href="@{/usuarios/delete/{id}(id=${usuario.usuarioId})}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este usuario? Si tiene préstamos activos podría generar un error.')">Eliminar</a>
+                    <a th:href="@{/admin/usuarios/edit/{id}(id=${usuario.usuarioId})}" class="btn btn-warning btn-sm">Editar</a>
+                    <a th:href="@{/admin/usuarios/delete/{id}(id=${usuario.usuarioId})}" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este usuario? Si tiene préstamos activos podría generar un error.')">Eliminar</a>
                 </td>
             </tr>
             </tbody>

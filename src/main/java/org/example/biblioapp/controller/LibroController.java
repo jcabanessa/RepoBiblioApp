@@ -8,11 +8,15 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
-@RequestMapping("/libros")
+@RequestMapping("/admin/libros")
 public class LibroController {
 
-    @Autowired
-    private LibroRepository libroRepository;
+
+    private final LibroRepository libroRepository;
+
+    public LibroController(LibroRepository libroRepository) {
+        this.libroRepository = libroRepository;
+    }
 
     @GetMapping
     public String listarLibros(Model model) {
@@ -29,7 +33,7 @@ public class LibroController {
     @PostMapping
     public String guardarLibro(@ModelAttribute("libro") Libro libro) {
         libroRepository.save(libro);
-        return "redirect:/libros";
+        return "redirect:/admin/libros";
     }
 
     @GetMapping("/edit/{id}")
@@ -43,6 +47,6 @@ public class LibroController {
     @GetMapping("/delete/{id}")
     public String eliminarLibro(@PathVariable Integer id) {
         libroRepository.deleteById(id);
-        return "redirect:/libros";
+        return "redirect:/admin/libros";
     }
 }

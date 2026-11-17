@@ -24,7 +24,7 @@
                 <div class="card-body p-4">
 
                     <!-- Formulario que envía los datos al controlador POST /libros -->
-                    <form th:action="@{/libros}" th:object="${libro}" method="post">
+                    <form th:action="@{/admin/libros}" th:object="${libro}" method="post">
 
                         <!-- Campo oculto imprescindible para que Spring sepa qué ID está editando -->
                         <input type="hidden" th:field="*{libroId}" />
@@ -51,7 +51,7 @@
 
                         <!-- Botones de acción alineados a los extremos (flexbox) -->
                         <div class="d-flex justify-content-between">
-                            <a th:href="@{/libros}" class="btn btn-outline-secondary">Cancelar</a>
+                            <a th:href="@{/admin/libros}" class="btn btn-outline-secondary">Cancelar</a>
                             <button type="submit" class="btn btn-success">Guardar Libro</button>
                         </div>
 

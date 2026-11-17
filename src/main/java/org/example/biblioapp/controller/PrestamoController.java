@@ -14,21 +14,28 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import java.security.Principal;
 
 import java.util.Date;
+import java.util.Calendar;
 
 @Controller
 @RequestMapping("/prestamos")
 public class PrestamoController {
 
-    @Autowired
-    private PrestamoRepository prestamoRepository;
+    private final PrestamoRepository prestamoRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final LibroRepository libroRepository;
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    //inyectamos los 3 repositorios
 
-    @Autowired
-    private LibroRepository libroRepository;
+    public PrestamoController(PrestamoRepository prestamoRepository,
+                              LibroRepository libroRepository,
+                              UsuarioRepository usuarioRepository){
+        this.prestamoRepository = prestamoRepository;
+        this.libroRepository = libroRepository;
+        this.usuarioRepository = usuarioRepository;
+    }
 
     @GetMapping
     public String listarPrestamos(Model model) {
@@ -39,7 +46,20 @@ public class PrestamoController {
     @GetMapping("/new")
     public String mostrarFormularioCreacion(Model model) {
         Prestamo prestamo = new Prestamo();
-        prestamo.setFechaPrestamo(new Date());
+
+        //cargamos las fechas por defecto antes de cargar la pantalla
+
+        java.sql.Date hoy = new java.sql.Date(System.currentTimeMillis()); //usamos java.sql.date para forzar el formato YYYY-MM-DD
+        prestamo.setFechaPrestamo(hoy);
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(hoy);
+        cal.add(Calendar.DAY_OF_MONTH, 15);
+        java.sql.Date devolucion = new java.sql.Date(cal.getTimeInMillis());
+
+        //asignado a fechaDevolucion
+        prestamo.setFechaDevolucion(devolucion); //15 días
+
         prestamo.setEstado("Activo");
         model.addAttribute("prestamo", prestamo);
         model.addAttribute("usuarios", usuarioRepository.findAll());
@@ -48,27 +68,28 @@ public class PrestamoController {
     }
 
     @PostMapping
-    public String guardarPrestamo(@Valid @ModelAttribute("prestamo") Prestamo prestamo,
-                                  BindingResult result,
-                                  Model model) {
-        if (result.hasErrors()) {
-            // Si hay errores, recargamos los desplegables y devolvemos al formulario
-            model.addAttribute("usuarios", usuarioRepository.findAll());
-            model.addAttribute("libros", libroRepository.findAll());
-            return "prestamos/form";
-        }
-        if (prestamo.getPrestamoId() != null && prestamo.getPrestamoId() > 0) {
-            // Si estamos editando, mantenemos la fecha de préstamo original
-            Prestamo prestamoExistente = prestamoRepository.findById(prestamo.getPrestamoId()).orElse(null);
-            if (prestamoExistente != null) {
-                prestamo.setFechaPrestamo(prestamoExistente.getFechaPrestamo());
-            }
-        } else {
-            // Si es nuevo, asignamos la fecha actual
-            prestamo.setFechaPrestamo(new Date());
-        }
+    public String guardarPrestamo(@ModelAttribute("prestamo") Prestamo prestamo) {
+
+        // Si SÍ hay ID (estamos editando), Spring Boot ya ha metido en el objeto 'prestamo'
+        // exactamente las fechas modificadas en el formulario web.
+
         prestamoRepository.save(prestamo);
         return "redirect:/prestamos";
+    }
+
+    @GetMapping("/mis-prestamos")
+    public String verMisPrestamos(Model model, Principal principal) {
+        // 1. Identificamos quién está conectado
+        String emailUsuario = principal.getName();
+        Usuario usuario = usuarioRepository.findByEmail(emailUsuario).orElse(null);
+
+        // 2. Buscamos sus préstamos y los inyectamos en la variable "prestamos" del HTML
+        if (usuario != null) {
+            model.addAttribute("prestamos", prestamoRepository.findByUsuario(usuario));
+        }
+
+        // 3. Devolvemos la vista (asumiendo que guardamos el HTML en templates/usuarios/)
+        return "usuarios/lista_mis_prestamos";
     }
 
     @GetMapping("/edit/{id}")
@@ -93,6 +114,45 @@ public class PrestamoController {
     public String eliminarPrestamo(@PathVariable Integer id) {
         prestamoRepository.deleteById(id);
         return "redirect:/prestamos";
+    }
+
+
+
+    @GetMapping("/solicitar/{libroId}")
+    public String solicitarPrestamo(@PathVariable Integer libroId, Principal  principal) {
+        //obtener mail de usuario logueado a través de Spring Security
+        String emailUusuario = principal.getName();
+        Usuario usuario = usuarioRepository.findByEmail(emailUusuario).orElse(null);
+
+        //buscar libro seleccionado
+        Libro libro = libroRepository.findById(libroId).orElse(null);
+
+        //si usuario existe y hay stock del libro creamos prestamo
+
+        if (usuario != null && libro != null && libro.getCantidad() > 0) {
+            Prestamo prestamo = new Prestamo();
+
+            //fechas
+            Date hoy = new Date();
+            prestamo.setFechaPrestamo(hoy);
+
+            //devolucion
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(hoy);
+            cal.add(Calendar.DAY_OF_MONTH, 15);
+            prestamo.setFechaDevolucion(cal.getTime());
+
+
+            prestamo.setUsuario(usuario);
+            prestamo.setLibro(libro);
+            prestamo.setEstado("Activo");
+            prestamoRepository.save(prestamo);
+
+            //restar 1 al stock del libro
+            libro.setCantidad(libro.getCantidad() - 1);
+            libroRepository.save(libro);
+        }
+        return "redirect:/catalogo";
     }
 
     @InitBinder

@@ -18,9 +18,12 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(auth -> auth
                         // Rutas públicas que no requieren iniciar sesión
-                        .requestMatchers("/","/login", "/usuarios/new", "/usuarios/registro", "/css/**", "/js/**","/img/**").permitAll()
-                        // Permitir que el formulario de guardar usuario funcione por POST sin loguearse
-                        .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
+                        .requestMatchers("/","/login", "/registro","/error", "/css/**", "/js/**","/img/**").permitAll()
+                        // Rutas reservadas al rol ADMIN
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        //rutas de usuario (accesibles para USER y también para ADMIN
+                        .requestMatchers("/user/**","/catalogo","/prestamos/mis-prestamos", "/prestamos/solicitar/**").hasAnyRole("USER","ADMIN")
+
                         // Cualquier otra ruta requiere autenticación
                         .anyRequest().authenticated()
                 )

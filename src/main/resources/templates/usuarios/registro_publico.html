@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<!-- Importamos cabecera Bootstrap -->
+<head th:replace="~{fragmentos :: cabecera('Registro - BiblioApp')}"></head>
+<body class="fondo-biblioteca d-flex align-items-center justify-content-center">
+
+<div class="container contenido-principal my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+
+            <!-- Tarjeta con el mismo estilo que el Login -->
+            <div class="card shadow-lg border-0 bg-dark text-light bg-opacity-75 p-4 rounded-4 backdrop-blur">
+                <div class="card-body">
+                    <h3 class="text-center mb-4 fw-bold text-shadow" style="font-family: 'Georgia', serif;">Crear nueva cuenta</h3>
+
+                    <form th:action="@{/registro}" th:object="${usuario}" method="post">
+
+                        <!-- mb-3 da la separación, form-control da la alineación -->
+                        <div class="mb-3">
+                            <label class="form-label">Nombre:</label>
+                            <input type="text" class="form-control" th:field="*{nombre}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Apellidos:</label>
+                            <input type="text" class="form-control" th:field="*{apellidos}" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Email:</label>
+                            <input type="email" class="form-control" th:field="*{email}" placeholder="tu@correo.com" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Teléfono:</label>
+                            <input type="text" class="form-control" th:field="*{telefono}">
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Contraseña:</label>
+                            <input type="password" class="form-control" th:field="*{password}" placeholder="••••••••" required>
+                        </div>
+
+                        <!-- Botón a lo ancho -->
+                        <div class="d-grid mb-3">
+                            <button type="submit" class="btn btn-info fw-bold text-dark py-2 shadow-sm">Registrarme</button>
+                        </div>
+
+                        <hr class="border-secondary my-3">
+
+                        <div class="text-center">
+                            <a th:href="@{/login}" class="text-light text-decoration-none small">← Volver al login</a>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

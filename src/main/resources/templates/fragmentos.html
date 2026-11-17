@@ -75,32 +75,43 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto align-items-center">
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/libros}">Libros</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/usuarios}">Usuarios</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" th:href="@{/prestamos}">Préstamos</a>
-                </li>
 
-                <!-- Si NO está autenticado: Mostrar botón de Login -->
-                <li class="nav-item ms-lg-3" sec:authorize="isAnonymous()">
+                <!-- 1. ZONA PÚBLICA (Si NO está autenticado) -->
+                <li class="nav-item ms-lg-3 gap-2 d-flex" sec:authorize="isAnonymous()">
                     <a class="btn btn-outline-light btn-sm px-3" th:href="@{/login}">Iniciar Sesión</a>
-                    <a class="btn btn-light btn-sm px-3 text-dark fw-semibold" th:href="@{/usuarios/new}">Registrarse</a>
+                    <!-- Modificado a la ruta correcta de registro público -->
+                    <a class="btn btn-light btn-sm px-3 text-dark fw-semibold" th:href="@{/registro}">Registrarse</a>
                 </li>
 
-                <!-- Si SÍ está autenticado: Mostrar Nombre y Botón de Cerrar Sesión directamente -->
+                <!-- 2. ZONA COMÚN LOGUEADOS (ADMIN y USER) -->
+                <li class="nav-item" sec:authorize="isAuthenticated() and !hasRole('ADMIN')">
+                    <a class="nav-link" th:href="@{/catalogo}">Catálogo Libros</a>
+                </li>
+
+                <!-- 3. ZONA EXCLUSIVA USER NORMAL -->
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link" th:href="@{/prestamos/mis-prestamos}">Mis Préstamos</a>
+                </li>
+
+                <!-- 4. ZONA EXCLUSIVA ADMINISTRADOR -->
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link text-warning" th:href="@{/admin/usuarios}">Gestión Usuarios</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link text-warning" th:href="@{/admin/libros}">Gestión Libros</a>
+                </li>
+                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                    <a class="nav-link text-warning" th:href="@{/prestamos}">Gestión Préstamos</a>
+                </li>
+
+                <!-- 5. PERFIL Y CERRAR SESIÓN -->
                 <li class="nav-item ms-lg-3 d-flex align-items-center gap-3" sec:authorize="isAuthenticated()">
                     <span class="text-light">👤 <span sec:authentication="name">Usuario</span></span>
-
                     <form th:action="@{/logout}" method="post" class="m-0">
                         <button type="submit" class="btn btn-sm btn-outline-danger">Cerrar Sesión</button>
                     </form>
                 </li>
-                    </ul>
-                </li>
+
             </ul>
         </div>
     </div>
@@ -110,3 +121,4 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+

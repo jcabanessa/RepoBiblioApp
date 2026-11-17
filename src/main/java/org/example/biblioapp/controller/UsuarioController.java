@@ -1,8 +1,9 @@
 package org.example.biblioapp.controller;
 
 import org.example.biblioapp.model.Usuario;
+import org.example.biblioapp.model.Rol;
 import org.example.biblioapp.repository.UsuarioRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.example.biblioapp.repository.RolRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -11,14 +12,24 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 
 @Controller
-@RequestMapping("/usuarios")
+@RequestMapping("/admin/usuarios")
+
+
+
 public class UsuarioController {
 
-    @Autowired
-    private UsuarioRepository usuarioRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final RolRepository rolRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public UsuarioController(UsuarioRepository usuarioRepository,
+                             RolRepository rolRepository,
+                             PasswordEncoder passwordEncoder) {
+        this.usuarioRepository = usuarioRepository;
+        this.rolRepository = rolRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
+
 
     @GetMapping
     public String listarUsuarios(Model model) {
@@ -55,9 +66,19 @@ public class UsuarioController {
             if (usuario.getPassword() != null && !usuario.getPassword().isEmpty()) {
                 usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
             }
+
+            //asignamos rol usuario por defecto para que no falle el login
+            if (usuario.getRoles().isEmpty()){
+                Rol rolUser = rolRepository.findByNombre("ROLE_USER").orElse(null);
+                if (rolUser != null){
+                    usuario.addRol(rolUser);
+                }
+            }
         }
         usuarioRepository.save(usuario);
-        return "redirect:/usuarios";
+
+        //CAMBIO CLAVE 4: REDIRIGIR A LA RUTA PROTEGIDA
+        return "redirect:/admin/usuarios";
     }
 
     @GetMapping("/edit/{id}")
@@ -72,6 +93,6 @@ public class UsuarioController {
     @GetMapping("/delete/{id}")
     public String eliminarUsuario(@PathVariable Integer id) {
         usuarioRepository.deleteById(id);
-        return "redirect:/usuarios";
+        return "redirect:/admin/usuarios";
     }
 }

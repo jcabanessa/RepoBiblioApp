@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<!-- Cargamos la cabecera -->
+<head th:replace="~{fragmentos :: cabecera('Mis Préstamos')}"></head>
+
+<body class="fondo-biblioteca">
+
+<!-- Inyectamos el menú dinámico -->
+<div th:replace="~{fragmentos :: menu-superior}"></div>
+
+<div class="container mt-4">
+
+    <!-- Título con estilos para que destaque sobre el fondo -->
+    <h1 class="mb-4 text-light text-shadow">Mis Libros Prestados</h1>
+
+    <!-- Si la lista está vacía, mostramos este mensaje -->
+    <div th:if="${#lists.isEmpty(prestamos)}" class="alert alert-info shadow-sm bg-white bg-opacity-75 text-dark fw-semibold">
+        No tienes ningún libro prestado actualmente. ¡Anímate a explorar el catálogo!
+        <br><br>
+        <a th:href="@{/catalogo}" class="btn btn-primary btn-sm">Ir al Catálogo</a>
+    </div>
+
+    <!-- Si la lista tiene elementos, dibujamos la tabla -->
+    <div th:unless="${#lists.isEmpty(prestamos)}" class="table-responsive shadow-sm">
+        <table class="table table-bordered table-striped table-hover mb-0 bg-white">
+            <thead class="table-dark">
+                <tr>
+                    <th>Libro</th>
+                    <th>Fecha de Préstamo</th>
+                    <th>Fecha de Devolución</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="prestamo : ${prestamos}">
+                    <!-- OJO: Revisa que tu entidad Prestamo tenga "libro.titulo", "fechaPrestamo" y "fechaDevolucion".
+                         Si los atributos se llaman distinto, cámbialos aquí -->
+                    <td th:text="${prestamo.libro.titulo}">Título del Libro</td>
+                    <td th:text="${#dates.format(prestamo.fechaPrestamo, 'dd-MM-yyyy')}">01-01-2026</td>
+                    <td th:text="${#dates.format(prestamo.fechaDevolucion, 'dd-MM-yyyy')}">15-01-2026</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+</body>
+</html>

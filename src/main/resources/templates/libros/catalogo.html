@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragmentos :: cabecera('Catálogo de Libros')}"></head>
+<body class="fondo-biblioteca">
+
+<div th:replace="~{fragmentos :: menu-superior}"></div>
+
+<div class="container mt-5">
+    <h1 class="mb-4 text-center">Catálogo de la Biblioteca</h1>
+
+    <!-- Sistema de rejilla de Bootstrap para mostrar tarjetas responsivas -->
+    <div class="row">
+        <div class="col-md-4 mb-4" th:each="libro : ${libros}">
+            <div class="card h-100 shadow-sm border-0">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title fw-bold text-primary" th:text="${libro.titulo}">Título del Libro</h5>
+                    <h6 class="card-subtitle mb-3 text-muted" th:text="${libro.autor}">Autor</h6>
+
+                    <p class="card-text mb-2">
+                        <strong>ISBN:</strong> <span th:text="${libro.isbn}">Editorial</span><br>
+                        <strong>Stock disponible:</strong>
+                        <span th:text="${libro.cantidad}" th:class="${libro.cantidad > 0} ? 'text-success fw-bold' : 'text-danger fw-bold'">3</span>
+                    </p>
+
+                    <!-- El botón se empuja hacia abajo automáticamente -->
+                    <div class="mt-auto">
+                        <a th:if="${libro.cantidad > 0}"
+                           th:href="@{/prestamos/solicitar/{id}(id=${libro.libroId})}"
+                           class="btn btn-success w-100">Solicitar Préstamo</a>
+
+                        <button th:if="${libro.cantidad == 0}"
+                                class="btn btn-secondary w-100" disabled>Sin Stock</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
