@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 
 <!-- 1. Cargamos el fragmento de la cabecera -->
 <head th:replace="~{fragmentos :: cabecera('Spring Library - Inicio')}"></head>
 
-<body class="fondo-biblioteca">
+<body class="bg-light">
 
 <!-- 2. Inyectamos la barra de navegación superior -->
 <div th:replace="~{fragmentos :: menu-superior}"></div>
@@ -14,47 +14,41 @@
     <!-- Sección de bienvenida centrada -->
     <div class="text-center mb-5">
         <h1 class="display-4 fw-bold">Bienvenido a Spring Library App</h1>
-        <p class="lead text-shadow" style="color: #F4EEDD;">Panel de control principal. Selecciona el módulo que deseas gestionar.</p>
+        <p class="lead text-muted">Panel de control principal. Selecciona el módulo que deseas gestionar.</p>
     </div>
 
     <!-- 3. Grid de tarjetas para las opciones del menú -->
     <div class="row justify-content-center text-center">
 
-
-        <!--********* ZONA ADMIN (SOLO LO VE EL ADMINISTRADOR) ***********-->
-
-        <!-- Módulo de Libros (ADMIN) -->
-        <div class="col-md-4 mb-4" sec:authorize="hasRole('ADMIN')">
-            <div class="card shadow-sm border-0 h-100 border-warning">
+        <!-- Módulo de Libros -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 h-100">
                 <div class="card-body p-4 d-flex flex-column">
-                    <h2 class="h3 mb-3">🛠️ Gestión Libros</h2>
-                    <p class="text-muted flex-grow-1">Añade, edita, elimina el catálogo de la biblioteca.</p>
-                    <a th:href="@{/admin/libros}" class="btn btn-warning w-100 mt-auto fw-bold">Gestionar Libros</a>
+                    <h2 class="h3 mb-3">📚 Libros</h2>
+                    <p class="text-muted flex-grow-1">Añade, edita, elimina y consulta el catálogo completo de la biblioteca.</p>
+                    <a th:href="@{/libros}" class="btn btn-primary w-100 mt-auto">Gestionar Libros</a>
                 </div>
             </div>
         </div>
 
-        <!--********* ZONA USER (SOLO LO VE EL USUARIO) ***********-->
-
-        <!-- Catálogo de Libros (USER) -->
-        <div class="col-md-4 mb-4" sec:authorize="hasRole('USER')">
-            <div class="card shadow-sm border-0 h-100 border-primary">
+        <!-- Módulo de Usuarios -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 h-100">
                 <div class="card-body p-4 d-flex flex-column">
-                    <h2 class="h3 mb-3">📖 Catálogo</h2>
-                    <p class="text-muted flex-grow-1">Consulta los libros disponibles en nuestra biblioteca.</p>
-                    <!-- Esta ruta asume que dejaremos un LibroController público en /libros para leer -->
-                    <a th:href="@{/catalogo}" class="btn btn-primary w-100 mt-auto">Ver Libros</a>
+                    <h2 class="h3 mb-3">👤 Usuarios</h2>
+                    <p class="text-muted flex-grow-1">Administra el registro de lectores y actualiza sus datos de contacto.</p>
+                    <a th:href="@{/usuarios}" class="btn btn-primary w-100 mt-auto">Gestionar Usuarios</a>
                 </div>
             </div>
         </div>
 
-        <!-- Mis Préstamos (USER) -->
-        <div class="col-md-4 mb-4" sec:authorize="hasRole('USER')">
-            <div class="card shadow-sm border-0 h-100 border-primary">
+        <!-- Módulo de Préstamos -->
+        <div class="col-md-4 mb-4">
+            <div class="card shadow-sm border-0 h-100">
                 <div class="card-body p-4 d-flex flex-column">
-                    <h2 class="h3 mb-3">📚 Mis Préstamos</h2>
-                    <p class="text-muted flex-grow-1">Revisa los libros que tienes en casa y cuándo devolverlos.</p>
-                    <a th:href="@{/user/mis-prestamos}" class="btn btn-primary w-100 mt-auto">Ver mis préstamos</a>
+                    <h2 class="h3 mb-3">🔄 Préstamos</h2>
+                    <p class="text-muted flex-grow-1">Controla las entregas, devoluciones y los plazos de vencimiento.</p>
+                    <a th:href="@{/prestamos}" class="btn btn-primary w-100 mt-auto">Gestionar Préstamos</a>
                 </div>
             </div>
         </div>
