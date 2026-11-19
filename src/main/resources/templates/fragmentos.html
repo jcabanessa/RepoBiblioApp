@@ -66,7 +66,7 @@
 <!-- Barra de navegación superior -->
 <nav th:fragment="menu-superior" class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-4">
     <div class="container">
-        <a class="navbar-brand" href="/"
+        <a class="navbar-brand" th:href="@{/}"
            style="color: #ced4da; font-family: 'Georgia', 'Garamond', 'Times New Roman', serif; font-size: 1.35rem; letter-spacing: 0.5px;">
             📖 Spring Library App
         </a>
@@ -93,18 +93,8 @@
                     <a class="nav-link" th:href="@{/prestamos/mis-prestamos}">Mis Préstamos</a>
                 </li>
 
-                <!-- 4. ZONA EXCLUSIVA ADMINISTRADOR -->
-                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                    <a class="nav-link text-warning" th:href="@{/admin/usuarios}">Gestión Usuarios</a>
-                </li>
-                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                    <a class="nav-link text-warning" th:href="@{/admin/libros}">Gestión Libros</a>
-                </li>
-                <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                    <a class="nav-link text-warning" th:href="@{/prestamos}">Gestión Préstamos</a>
-                </li>
 
-                <!-- 5. PERFIL Y CERRAR SESIÓN -->
+                <!-- 4. PERFIL Y CERRAR SESIÓN -->
                 <li class="nav-item ms-lg-3 d-flex align-items-center gap-3" sec:authorize="isAuthenticated()">
                     <span class="text-light">👤 <span sec:authentication="name">Usuario</span></span>
                     <form th:action="@{/logout}" method="post" class="m-0">

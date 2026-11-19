@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <!-- 1. Cargamos el fragmento de la cabecera -->
 <head th:replace="~{fragmentos :: cabecera('Spring Library - Inicio')}"></head>
@@ -14,11 +15,12 @@
     <!-- Sección de bienvenida centrada -->
     <div class="text-center mb-5">
         <h1 class="display-4 fw-bold">Bienvenido a Spring Library App</h1>
-        <p class="lead text-muted">Panel de control principal. Selecciona el módulo que deseas gestionar.</p>
+        <p class="lead text-muted" sec:authorize="hasRole('ADMIN')">Panel de control principal. Selecciona el módulo que deseas gestionar.</p>
+        <p class="lead text-muted" sec:authorize="isAuthenticated() and !hasRole('ADMIN')">Consulta el catálogo de libros y gestiona tus préstamos desde el menú superior.</p>
     </div>
 
-    <!-- 3. Grid de tarjetas para las opciones del menú -->
-    <div class="row justify-content-center text-center">
+    <!-- 3. Grid de tarjetas para las opciones del menú (SOLO ADMIN) -->
+    <div class="row justify-content-center text-center" sec:authorize="hasRole('ADMIN')">
 
         <!-- Módulo de Libros -->
         <div class="col-md-4 mb-4">
@@ -26,7 +28,7 @@
                 <div class="card-body p-4 d-flex flex-column">
                     <h2 class="h3 mb-3">📚 Libros</h2>
                     <p class="text-muted flex-grow-1">Añade, edita, elimina y consulta el catálogo completo de la biblioteca.</p>
-                    <a th:href="@{/libros}" class="btn btn-primary w-100 mt-auto">Gestionar Libros</a>
+                    <a th:href="@{/admin/libros}" class="btn btn-primary w-100 mt-auto">Gestionar Libros</a>
                 </div>
             </div>
         </div>
@@ -37,7 +39,7 @@
                 <div class="card-body p-4 d-flex flex-column">
                     <h2 class="h3 mb-3">👤 Usuarios</h2>
                     <p class="text-muted flex-grow-1">Administra el registro de lectores y actualiza sus datos de contacto.</p>
-                    <a th:href="@{/usuarios}" class="btn btn-primary w-100 mt-auto">Gestionar Usuarios</a>
+                    <a th:href="@{/admin/usuarios}" class="btn btn-primary w-100 mt-auto">Gestionar Usuarios</a>
                 </div>
             </div>
         </div>
@@ -48,7 +50,7 @@
                 <div class="card-body p-4 d-flex flex-column">
                     <h2 class="h3 mb-3">🔄 Préstamos</h2>
                     <p class="text-muted flex-grow-1">Controla las entregas, devoluciones y los plazos de vencimiento.</p>
-                    <a th:href="@{/prestamos}" class="btn btn-primary w-100 mt-auto">Gestionar Préstamos</a>
+                    <a th:href="@{/admin/prestamos}" class="btn btn-primary w-100 mt-auto">Gestionar Préstamos</a>
                 </div>
             </div>
         </div>

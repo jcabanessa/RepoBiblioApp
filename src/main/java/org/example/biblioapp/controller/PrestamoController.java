@@ -20,7 +20,7 @@ import java.util.Date;
 import java.util.Calendar;
 
 @Controller
-@RequestMapping("/prestamos")
+
 public class PrestamoController {
 
     private final PrestamoRepository prestamoRepository;
@@ -37,13 +37,13 @@ public class PrestamoController {
         this.usuarioRepository = usuarioRepository;
     }
 
-    @GetMapping
+    @GetMapping ("/admin/prestamos")
     public String listarPrestamos(Model model) {
         model.addAttribute("prestamos", prestamoRepository.findAll());
         return "prestamos/lista";
     }
 
-    @GetMapping("/new")
+    @GetMapping("/admin/prestamos/new")
     public String mostrarFormularioCreacion(Model model) {
         Prestamo prestamo = new Prestamo();
 
@@ -67,17 +67,17 @@ public class PrestamoController {
         return "prestamos/form";
     }
 
-    @PostMapping
+    @PostMapping ("/admin/prestamos")
     public String guardarPrestamo(@ModelAttribute("prestamo") Prestamo prestamo) {
 
         // Si SÍ hay ID (estamos editando), Spring Boot ya ha metido en el objeto 'prestamo'
         // exactamente las fechas modificadas en el formulario web.
 
         prestamoRepository.save(prestamo);
-        return "redirect:/prestamos";
+        return "redirect:/admin/prestamos";
     }
 
-    @GetMapping("/mis-prestamos")
+    @GetMapping("/prestamos/mis-prestamos")
     public String verMisPrestamos(Model model, Principal principal) {
         // 1. Identificamos quién está conectado
         String emailUsuario = principal.getName();
@@ -92,7 +92,7 @@ public class PrestamoController {
         return "usuarios/lista_mis_prestamos";
     }
 
-    @GetMapping("/edit/{id}")
+    @GetMapping("/admin/prestamos/edit/{id}")
     public String mostrarFormularioEdicion(@PathVariable Integer id,Model model) {
         Prestamo prestamo = prestamoRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("ID de préstamo inválido: " + id));
@@ -110,15 +110,15 @@ public class PrestamoController {
         return "prestamos/form";
     }
 
-    @GetMapping("/delete/{id}")
+    @GetMapping("/admin/prestamos/delete/{id}")
     public String eliminarPrestamo(@PathVariable Integer id) {
         prestamoRepository.deleteById(id);
-        return "redirect:/prestamos";
+        return "redirect:/admin/prestamos";
     }
 
 
 
-    @GetMapping("/solicitar/{libroId}")
+    @GetMapping("/prestamos/solicitar/{libroId}")
     public String solicitarPrestamo(@PathVariable Integer libroId, Principal  principal) {
         //obtener mail de usuario logueado a través de Spring Security
         String emailUusuario = principal.getName();
