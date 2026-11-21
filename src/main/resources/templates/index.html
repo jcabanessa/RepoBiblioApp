@@ -2,61 +2,67 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
-<!-- 1. Cargamos el fragmento de la cabecera -->
+<!-- 1. Cargamos el fragmento de la cabecera (aquí viene Bootstrap) -->
 <head th:replace="~{fragmentos :: cabecera('Spring Library - Inicio')}"></head>
 
 <body class="bg-light">
 
-<!-- 2. Inyectamos la barra de navegación superior -->
+<!-- 2. Barra de navegación superior -->
 <div th:replace="~{fragmentos :: menu-superior}"></div>
 
-<div class="container mt-5">
+<!-- 3. Contenedor a pantalla completa con la imagen de fondo responsive -->
+<div class="d-flex align-items-center justify-content-center text-white"
+     th:style="'background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url(' + @{/img/006-library-biblioteca-angelica-a-roma_0002.jpg} + ') no-repeat center center; background-size: cover; min-height: calc(100vh - 56px);'">
 
-    <!-- Sección de bienvenida centrada -->
-    <div class="text-center mb-5">
-        <h1 class="display-4 fw-bold">Bienvenido a Spring Library App</h1>
-        <p class="lead text-muted" sec:authorize="hasRole('ADMIN')">Panel de control principal. Selecciona el módulo que deseas gestionar.</p>
-        <p class="lead text-muted" sec:authorize="isAuthenticated() and !hasRole('ADMIN')">Consulta el catálogo de libros y gestiona tus préstamos desde el menú superior.</p>
+    <div class="container py-5">
+
+        <!-- Sección de bienvenida centrada -->
+        <div class="text-center mb-5">
+            <h1 class="display-4 fw-bold">Bienvenido a Spring Library App</h1>
+            <p class="lead" sec:authorize="isAnonymous()">Inicia sesión o regístrate para explorar nuestro catálogo y gestionar tus préstamos.</p>
+            <p class="lead" sec:authorize="hasRole('ADMIN')">Panel de control principal. Selecciona el módulo que deseas gestionar.</p>
+            <p class="lead" sec:authorize="isAuthenticated() and !hasRole('ADMIN')">Consulta el catálogo de libros y gestiona tus préstamos desde el menú superior.</p>
+        </div>
+
+        <!-- Grid de tarjetas (SOLO visible al iniciar sesión como ADMIN) -->
+        <div class="row justify-content-center text-center text-dark" sec:authorize="hasRole('ADMIN')">
+
+            <!-- Módulo de Libros -->
+            <div class="col-md-4 mb-4">
+                <div class="card shadow border-0 h-100 bg-white bg-opacity-90">
+                    <div class="card-body p-4 d-flex flex-column">
+                        <h2 class="h3 mb-3">📚 Libros</h2>
+                        <p class="text-muted flex-grow-1">Añade, edita, elimina y consulta el catálogo completo de la biblioteca.</p>
+                        <a th:href="@{/admin/libros}" class="btn btn-primary w-100 mt-auto">Gestionar Libros</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Módulo de Usuarios -->
+            <div class="col-md-4 mb-4">
+                <div class="card shadow border-0 h-100 bg-white bg-opacity-90">
+                    <div class="card-body p-4 d-flex flex-column">
+                        <h2 class="h3 mb-3">👤 Usuarios</h2>
+                        <p class="text-muted flex-grow-1">Administra el registro de lectores y actualiza sus datos de contacto.</p>
+                        <a th:href="@{/admin/usuarios}" class="btn btn-primary w-100 mt-auto">Gestionar Usuarios</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Módulo de Préstamos -->
+            <div class="col-md-4 mb-4">
+                <div class="card shadow border-0 h-100 bg-white bg-opacity-90">
+                    <div class="card-body p-4 d-flex flex-column">
+                        <h2 class="h3 mb-3">🔄 Préstamos</h2>
+                        <p class="text-muted flex-grow-1">Controla las entregas, devoluciones y los plazos de vencimiento.</p>
+                        <a th:href="@{/admin/prestamos}" class="btn btn-primary w-100 mt-auto">Gestionar Préstamos</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
     </div>
-
-    <!-- 3. Grid de tarjetas para las opciones del menú (SOLO ADMIN) -->
-    <div class="row justify-content-center text-center" sec:authorize="hasRole('ADMIN')">
-
-        <!-- Módulo de Libros -->
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body p-4 d-flex flex-column">
-                    <h2 class="h3 mb-3">📚 Libros</h2>
-                    <p class="text-muted flex-grow-1">Añade, edita, elimina y consulta el catálogo completo de la biblioteca.</p>
-                    <a th:href="@{/admin/libros}" class="btn btn-primary w-100 mt-auto">Gestionar Libros</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Módulo de Usuarios -->
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body p-4 d-flex flex-column">
-                    <h2 class="h3 mb-3">👤 Usuarios</h2>
-                    <p class="text-muted flex-grow-1">Administra el registro de lectores y actualiza sus datos de contacto.</p>
-                    <a th:href="@{/admin/usuarios}" class="btn btn-primary w-100 mt-auto">Gestionar Usuarios</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Módulo de Préstamos -->
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body p-4 d-flex flex-column">
-                    <h2 class="h3 mb-3">🔄 Préstamos</h2>
-                    <p class="text-muted flex-grow-1">Controla las entregas, devoluciones y los plazos de vencimiento.</p>
-                    <a th:href="@{/admin/prestamos}" class="btn btn-primary w-100 mt-auto">Gestionar Préstamos</a>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
 </div>
 
 </body>
